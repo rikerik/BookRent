@@ -4,6 +4,7 @@ import com.rikerik.BookRent.DAO.UserRepository;
 import com.rikerik.BookRent.Model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -17,24 +18,25 @@ import java.util.List;
 
 @SpringBootApplication
 @RestController
-@RequestMapping("bookrent")
+@RequestMapping("api")
 
-public class BookRentApplication {
+public class Controller {
 
-    private static final Logger logger = LoggerFactory.getLogger(BookRentApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+    @Autowired
     private final UserRepository userRepository;
 
-    public BookRentApplication(UserRepository userRepository) {
+    public Controller(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public static void main(String[] args) {
 
-        SpringApplication.run(BookRentApplication.class, args);
+        SpringApplication.run(Controller.class, args);
 
     }
 
-    @GetMapping("/getAllUsers")
+    @GetMapping("/getAll")
     public ResponseEntity<List<User>> getUsers() {
         logger.info("All users are listed");
         return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK); //return all users
