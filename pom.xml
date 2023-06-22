@@ -66,6 +66,10 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.1.2.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
