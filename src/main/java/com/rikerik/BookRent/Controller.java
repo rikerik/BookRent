@@ -18,17 +18,18 @@ import java.util.List;
 
 @SpringBootApplication
 @RestController
-@RequestMapping("api")
-
 public class Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
     private final UserRepository userRepository;
 
+    @Autowired
+
     public Controller(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
 
     public static void main(String[] args) {
 

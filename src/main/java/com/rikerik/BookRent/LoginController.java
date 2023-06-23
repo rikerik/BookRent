@@ -26,12 +26,15 @@ public class LoginController {
         return "login";
     }
 
+    //handling login request
+    //The Model object is used to pass data from controller to the view, so I can add attributes
+    //to the model which will be rendered on the html page by Thymeleaf
     @PostMapping("/login")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
-        User user = userRepository.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            model.addAttribute("username", username);
-            return "success";
+        User user = userRepository.findByUsername(username); // Retrieve the user from the repository by the given parameter
+        if (user != null && user.getPassword().equals(password)) {     // Check if the user exists and the password matches
+            model.addAttribute("username", username); // Add the username attribute to the model
+            return "succes";
         } else {
             return "error";
         }
