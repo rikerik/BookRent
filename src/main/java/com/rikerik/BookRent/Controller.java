@@ -9,10 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,11 +59,25 @@ public class Controller {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     public ResponseEntity<Object> deleteUser(@RequestParam("id") Long id) {
         userRepository.deleteById(id);
         logger.info("User deleted");
         return new ResponseEntity<>("User deleted!", HttpStatus.OK);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<Object> register(@RequestParam("id") Long id,
+                                           @RequestParam("username") String username, //parameters for register new User
+                                           @RequestParam("password") String password,
+                                           @RequestParam("email") String email) {
+        userRepository.save(User.builder()
+                .userId(id)//using lombok builder to make the User with the given parameters
+                .username(username)
+                .password(password)
+                .email(email)
+                .build());
+        logger.info("User updated!");
+        return new ResponseEntity<>("User updated!", HttpStatus.CREATED);
+    }
 }
