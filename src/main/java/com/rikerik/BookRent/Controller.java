@@ -7,10 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,10 +62,11 @@ public class Controller {
         }
     }
 
-    @PostMapping("/CreateUser")
-    public User CreateUser(User user) {
-        return user; //TODO
+    @DeleteMapping
+    public ResponseEntity<Object> deleteUser(@RequestParam("id") Long id) {
+        userRepository.deleteById(id);
+        logger.info("User deleted");
+        return new ResponseEntity<>("User deleted!", HttpStatus.OK);
     }
-
 
 }
