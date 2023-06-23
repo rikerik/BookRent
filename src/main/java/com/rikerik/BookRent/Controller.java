@@ -38,8 +38,14 @@ public class Controller {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getUsers() {
-        logger.info("All users are listed");
-        return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK); //return all users
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            logger.info("No users found");
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            logger.info("All users are listed");
+            return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK); //return all users
+        }
     }
 
     @GetMapping("/getById")
