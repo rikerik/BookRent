@@ -7,14 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @RestController
@@ -41,6 +40,18 @@ public class Controller {
     public ResponseEntity<List<User>> getUsers() {
         logger.info("All users are listed");
         return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK); //return all users
+    }
+
+    @GetMapping("/getById")
+    public ResponseEntity<Object> getUser(@RequestParam("id") Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            logger.info("User listed");
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            logger.info("User not found");
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/CreateUser")
