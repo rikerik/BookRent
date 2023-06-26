@@ -1,0 +1,14 @@
+{
+  "name": "bookrent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/main/resources/static/css/style.css\n -o ./src/main/resources/static/css/tailwind.css --watch\n"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  }
+}
