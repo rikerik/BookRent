@@ -18,3 +18,5 @@ spring:
 
   main:
     web-application-type: servlet
+  thymeleaf:
+    prefix: classpath:/static/

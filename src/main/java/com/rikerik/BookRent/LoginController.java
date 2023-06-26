@@ -28,11 +28,6 @@ public class LoginController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/index")
-    public String showIndex(Model model) {
-        return "index";
-    }
-
     @RequestMapping("/loginTest")
     public String showLoginPage() {
         return "login";
