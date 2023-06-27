@@ -1,4 +1,4 @@
-package com.rikerik.BookWave;
+package com.rikerik.BookWave.Controller;
 
 import com.rikerik.BookWave.DAO.UserRepository;
 import com.rikerik.BookWave.Model.User;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @SpringBootApplication
 @Controller
 public class LoginController {
-    private static final Logger logger = LoggerFactory.getLogger(com.rikerik.BookWave.Controller.class);
+    private static final Logger logger = LoggerFactory.getLogger(com.rikerik.BookWave.Controller.Controller.class);
     private final UserRepository userRepository;
 
 

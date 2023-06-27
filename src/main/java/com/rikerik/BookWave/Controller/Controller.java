@@ -1,4 +1,4 @@
-package com.rikerik.BookWave;
+package com.rikerik.BookWave.Controller;
 
 import com.rikerik.BookWave.DAO.UserRepository;
 import com.rikerik.BookWave.Model.User;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootApplication
 @RestController
 public class Controller {
 
@@ -29,11 +28,7 @@ public class Controller {
     }
 
 
-    public static void main(String[] args) {
 
-        SpringApplication.run(Controller.class, args);
-
-    }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getUsers() {
