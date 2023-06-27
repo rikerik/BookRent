@@ -4,15 +4,38 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="css/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <title> Login page </title>
 </head>
 
 <body>
-<div  class="bg-amber-950">
-    <h1>Hello world!</h1>
-    <a href="welcome/login.html">Login</a>
-    <a href="welcome/register.html">Register</a>
+<div class="navbar">
+    <div class="navbar-start">
+        <a class="navbar-item">BookWave</a>
+    </div>
+    <div class="navbar-center">
+        <a class="navbar-item" href="welcome/login.html">Login</a>
+        <a class="navbar-item" href="welcome/register.html">Register</a>
+        <a class="navbar-item">About</a>
+    </div>
+    <div class="navbar-end">
+        <a class="navbar-item" href="index.html">Home</a>
+    </div>
 </div>
+
+
+<div class="flex h-screen">
+    <div class="m-auto popover">
+            <label class="popover-trigger my-2 btn btn-solid-primary" tabindex="0">Click here</label>
+            <div class="popover-content" tabindex="0">
+                <div class="popover-arrow"></div>
+                <div class="p-4 text-sm">This is the index page</div>
+        </div>
+    </div>
+</div>
+
 
 
 </body>

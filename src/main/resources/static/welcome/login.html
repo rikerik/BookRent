@@ -4,24 +4,56 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="../css/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+
 
     <title> Login page </title>
 </head>
 
 <body>
-<div class="text-center">
-    <h1>Login </h1>
-</div>
-<form action="/welcome/login" method="POST" autocomplete="off">
-    <div class="container">
-        <label>Username:</label>
-        <input type="text" placeholder="Enter Username" name="username" required>
-        <label>Password:</label>
-        <input type="password" placeholder="Enter Password" name="password" required>
-        <button type="submit">Login</button>
-        <input type="checkbox" checked="checked"> Remember me
-        <button type="button" class="cancelbtn"> Cancel</button>
+<div class="navbar">
+    <div class="navbar-start">
+        <a class="navbar-item">BookWave</a>
     </div>
-</form>
+    <div class="navbar-center">
+        <a class="navbar-item" href="login.html">Login</a>
+        <a class="navbar-item" href="register.html">Register</a>
+        <a class="navbar-item">About</a>
+    </div>
+    <div class="navbar-end">
+        <a class="navbar-item" href="../index.html">Home</a>
+    </div>
+</div>
+
+<div class="flex h-screen">
+    <div class="m-auto">
+        <form action="/welcome/login" method="POST" autocomplete="off">
+            <div class="container">
+                <div class="flex flex-col justify-center items-center">
+                    <label>Username:</label>
+                    <label>
+                        <input class="input-ghost-primary input" type="text" placeholder="Enter Username"
+                               name="username"
+                               required>
+                    </label>
+                </div>
+                <div class="flex flex-col justify-center items-center">
+
+                    <label>Password:</label>
+                    <label>
+                        <input class="input-ghost-primary input" type="password" placeholder="Enter Password"
+                               name="password"
+                               required>
+                    </label>
+                </div>
+                <div class="btn btn-primary btn-block flex flex-col justify-center items-center my-4 mx-0">
+                    <button type="submit">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>
