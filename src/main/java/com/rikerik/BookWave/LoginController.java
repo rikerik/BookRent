@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @SpringBootApplication
 @Controller
-@RequestMapping("welcome")
 public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(com.rikerik.BookWave.Controller.class);
     private final UserRepository userRepository;
