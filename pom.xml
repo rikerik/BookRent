@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.rikerik</groupId>
-    <artifactId>BookRent</artifactId>
+    <artifactId>BookWave</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>BookRent</name>
     <description>A book renting application</description>

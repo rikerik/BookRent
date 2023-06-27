@@ -1,10 +1,8 @@
-package com.rikerik.BookRent.Model;
+package com.rikerik.BookWave.Model;
 
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.io.Serializable;
 
 
 @Entity // to map object to db

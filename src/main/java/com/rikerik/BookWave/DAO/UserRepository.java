@@ -1,8 +1,7 @@
-package com.rikerik.BookRent.DAO;
+package com.rikerik.BookWave.DAO;
 
-import com.rikerik.BookRent.Model.User;
+import com.rikerik.BookWave.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
