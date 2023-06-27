@@ -3,7 +3,7 @@
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../css/tailwind.css" rel="stylesheet">
+    <link href="css/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -17,18 +17,18 @@
         <a class="navbar-item">BookWave</a>
     </div>
     <div class="navbar-center">
-        <a class="navbar-item" href="login.html">Login</a>
-        <a class="navbar-item" href="register.html">Register</a>
+        <a class="navbar-item" th:href="@{/login}">Login</a>
+        <a class="navbar-item" th:href="@{/register}">Register</a>
         <a class="navbar-item">About</a>
     </div>
     <div class="navbar-end">
-        <a class="navbar-item" href="../index.html">Home</a>
+        <a class="navbar-item" th:href="@{/}">Home</a>
     </div>
 </div>
 
 <div class="flex h-screen">
     <div class="m-auto">
-        <form action="/login" method="POST" autocomplete="off">
+        <form th:action="@{/login}" method="POST" autocomplete="off">
             <div class="container">
                 <div class="flex flex-col justify-center items-center">
                     <label>Username:</label>

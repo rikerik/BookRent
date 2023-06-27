@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,11 +25,6 @@ public class LoginController {
     @Autowired
     public LoginController(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    @RequestMapping("/loginTest")
-    public String showLoginPage() {
-        return "login";
     }
 
     //handling login request
@@ -47,6 +43,20 @@ public class LoginController {
         }
     }
 
+    @GetMapping("/") //to show the login form with get
+    public String index() {
+        return "index";
+    }
+    @GetMapping("/login") //to show the login form with get
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/register") //to show the register form with get
+    public String register() {
+        return "register";
+    }
+
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestParam("username") String username, //parameters for register new User
                                            @RequestParam("password") String password,
@@ -59,4 +69,6 @@ public class LoginController {
         logger.info("User registered!");
         return new ResponseEntity<>("User registered!", HttpStatus.CREATED);
     }
+    //TODO
+    //redirect to index
 }
