@@ -41,7 +41,7 @@ public class SecurityConfiguration {
 // Configures and returns an AuthenticationProvider
 // that uses a DaoAuthenticationProvider with a UserDetailsService
 // and a BCryptPasswordEncoder for secure password hashing.
-    AuthenticationProvider authenticationProvider(){
+    AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
         // Set the UserDetailsService that will be used to retrieve user details
@@ -60,7 +60,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/register", "/js/**", "/css/**").permitAll()
                         .anyRequest().authenticated() //the register page is available even without authentication
                 )
                 .formLogin((form) -> form

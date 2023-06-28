@@ -13,8 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @SpringBootApplication
 @Controller
@@ -32,30 +32,38 @@ public class LoginController {
     //The Model object is used to pass data from controller to the view, so I can add attributes
     //to the model which will be rendered on the html page by Thymeleaf
     @PostMapping("/login")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
+    public String login(RedirectAttributes redirectAttributes, @RequestParam("username") String username, @RequestParam("password") String password, Model model) {
         User user = userRepository.findByUsername(username); // Retrieve the user from the repository by the given parameter
         if (user != null && user.getPassword().equals(password)) {     // Check if the user exists and the password matches
             model.addAttribute("username", username); // Add the username attribute to the model
             logger.info("login succesful!");
+            redirectAttributes.addAttribute("succes", "true");
             return "succes";
         } else {
-            logger.info("login was not succesful!");
+            redirectAttributes.addAttribute("error", "exists");
             return "error";
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestParam("username") String username, //parameters for register new User
-                                           @RequestParam("password") String password,
-                                           @RequestParam("email") String email) {
+    public String register(@RequestParam("username") String username, //parameters for register new User
+                           @RequestParam("password") String password,
+                           @RequestParam("email") String email,
+                           RedirectAttributes redirectAttributes) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        if (userRepository.findByUsername(username) != null) {
+            redirectAttributes.addAttribute("error", "exists");
+            return "register";
+        }
         userRepository.save(User.builder()  //using lombok builder to make the User with the given parameters
                 .username(username)
                 .password(bCryptPasswordEncoder.encode(password))
                 .email(email)
                 .build());
         logger.info("User registered!");
-        return new ResponseEntity<>("User registered!", HttpStatus.CREATED);
+        redirectAttributes.addAttribute("succes", "true");
+        return "login";
     }
 
     //Views
