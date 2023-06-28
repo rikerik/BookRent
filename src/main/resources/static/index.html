@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -11,9 +11,10 @@
 </head>
 
 <body>
-<div class="navbar">
+<div class="navbar  ">
     <div class="navbar-start">
         <a class="navbar-item">BookWave</a>
+        <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
     </div>
     <div class="navbar-center">
         <a class="navbar-item" th:href="@{/login}">Login</a>
@@ -21,21 +22,20 @@
         <a class="navbar-item">About</a>
     </div>
     <div class="navbar-end">
-        <a class="navbar-item" th:href="@{/}">Home</a>
+        <a class="navbar-item navbar-active"  th:href="@{/}">Home</a>
     </div>
 </div>
 
 
 <div class="flex h-screen">
     <div class="m-auto popover">
-            <label class="popover-trigger my-2 btn btn-solid-primary" tabindex="0">Click here</label>
-            <div class="popover-content" tabindex="0">
-                <div class="popover-arrow"></div>
-                <div class="p-4 text-sm">This is the index page</div>
+        <label class="popover-trigger my-2 btn btn-solid-primary" tabindex="0">Click here</label>
+        <div class="popover-content" tabindex="0">
+            <div class="popover-arrow"></div>
+            <div class="p-4 text-sm">This is the index page</div>
         </div>
     </div>
 </div>
-
 
 
 </body>
