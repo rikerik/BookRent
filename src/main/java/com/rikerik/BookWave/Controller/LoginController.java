@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,10 +44,26 @@ public class LoginController {
         }
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<Object> register(@RequestParam("username") String username, //parameters for register new User
+                                           @RequestParam("password") String password,
+                                           @RequestParam("email") String email) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        userRepository.save(User.builder()  //using lombok builder to make the User with the given parameters
+                .username(username)
+                .password(bCryptPasswordEncoder.encode(password))
+                .email(email)
+                .build());
+        logger.info("User registered!");
+        return new ResponseEntity<>("User registered!", HttpStatus.CREATED);
+    }
+
+    //Views
     @GetMapping("/") //to show the login form with get
     public String index() {
         return "index";
     }
+
     @GetMapping("/login") //to show the login form with get
     public String login() {
         return "login";
@@ -56,19 +73,4 @@ public class LoginController {
     public String register() {
         return "register";
     }
-
-    @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestParam("username") String username, //parameters for register new User
-                                           @RequestParam("password") String password,
-                                           @RequestParam("email") String email) {
-        userRepository.save(User.builder()  //using lombok builder to make the User with the given parameters
-                .username(username)
-                .password(password)
-                .email(email)
-                .build());
-        logger.info("User registered!");
-        return new ResponseEntity<>("User registered!", HttpStatus.CREATED);
-    }
-    //TODO
-    //redirect to index
 }

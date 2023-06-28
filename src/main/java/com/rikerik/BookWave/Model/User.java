@@ -3,6 +3,12 @@ package com.rikerik.BookWave.Model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 
 @Entity // to map object to db
@@ -11,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder //generating a builder pattern for the class
-public class User {
+public class User{
 
     @Id
     @SequenceGenerator(name = "ID_SEQ", // name of seq. gen.
@@ -31,7 +37,6 @@ public class User {
     private String email;
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role", nullable = true)
-    private Roles type;
-
+    private Roles Role;
 
 }
