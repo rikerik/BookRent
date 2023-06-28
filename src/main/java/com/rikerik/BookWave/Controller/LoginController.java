@@ -81,4 +81,9 @@ public class LoginController {
     public String register() {
         return "register";
     }
+
+    @GetMapping("/loginFailure")
+    public String loginFailure() {
+        return "loginFailure";
+    }
 }

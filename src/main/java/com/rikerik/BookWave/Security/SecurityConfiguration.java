@@ -1,6 +1,9 @@
 package com.rikerik.BookWave.Security;
 
 import com.rikerik.BookWave.Service.CustomUserDetailsService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +18,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,8 +29,13 @@ import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+
+import java.io.IOException;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -56,6 +65,19 @@ public class SecurityConfiguration {
         return provider;
     }
 
+    @Component
+    public static class MyAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+        @Override
+        public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                            AuthenticationException exception) throws IOException, ServletException {
+            String username = request.getParameter("username");
+            String error = exception.getMessage();
+            System.out.println("A failed login attempt with username: "
+                    + username + ". Reason: " + error);
+        }
+    }
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -65,8 +87,12 @@ public class SecurityConfiguration {
                 )
                 .formLogin((form) -> form
                         .loginPage("/login") //the only available page next to the register. If credentials are valid, authentication is finished
+                        .usernameParameter("username")
+                        .failureHandler(new MyAuthenticationFailureHandler())
+                        .failureUrl("/loginFailure")
                         .permitAll()
                         .defaultSuccessUrl("/", true)
+
                 )
                 .logout(LogoutConfigurer::permitAll);
 
