@@ -86,4 +86,10 @@ public class LoginController {
     public String loginFailure() {
         return "loginFailure";
     }
+
+    //TODO
+    //Make in memory database
+    //if user logged in, remove login and register page
+    //show the logged in user in every page
+    //make table for book and a simple page for available books
 }
