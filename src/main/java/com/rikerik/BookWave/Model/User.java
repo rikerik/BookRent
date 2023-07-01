@@ -27,7 +27,7 @@ public class User{
             strategy = GenerationType.SEQUENCE, //generating by sequence
             generator = "ID_SEQ" //the name of the generator
     )
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, columnDefinition = "serial")
     private long userId;
     @Column(name = "username", nullable = false)
     private String username;
