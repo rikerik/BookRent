@@ -91,4 +91,5 @@ public class LoginController {
     //if user logged in, remove login and register page
     //show the logged in user in every page
     //make table for book and a simple page for available books
+
 }

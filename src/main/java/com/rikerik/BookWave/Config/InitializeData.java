@@ -1,14 +1,10 @@
 package com.rikerik.BookWave.Config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -25,7 +21,7 @@ public class InitializeData {
     @EventListener(ApplicationReadyEvent.class)
     public void loadData() {
         // Load the SQL script
-        ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("InitData.sql"));
+        ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("InitUserData.sql"));
 
         // Encrypt the passwords
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -42,5 +38,12 @@ public class InitializeData {
         jdbcTemplate.update("UPDATE users SET password = ? WHERE username = ?", encryptedPassword1, "Erik");
         jdbcTemplate.update("UPDATE users SET password = ? WHERE username = ?", encryptedPassword2, "Admin");
         jdbcTemplate.update("UPDATE users SET password = ? WHERE username = ?", encryptedPassword3, "Test");
+
+        //running the script which loads the books
+
+        resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("InitBookData.sql"));
+
+        resourceDatabasePopulator.setContinueOnError(true);
+        resourceDatabasePopulator.execute(dataSource);
     }
 }

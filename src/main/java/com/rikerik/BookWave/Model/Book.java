@@ -27,8 +27,8 @@ public class Book {
     private String title;
     @Column(name = "description", nullable = false)
     private String description;
-    @Column(name = "publisher",nullable = false)
-    private String publisherName;
+    @Column(name = "author",nullable = false)
+    private String authorName;
     @Column(name = "available",nullable = false)
     private boolean isRented;
     @Lob
