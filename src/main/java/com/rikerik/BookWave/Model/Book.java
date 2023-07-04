@@ -32,6 +32,6 @@ public class Book {
     @Column(name = "available",nullable = false)
     private boolean isRented;
     @Lob
-    @Column (name = "image")
+    @Column (name = "image", columnDefinition = "bytea")
     private byte[] image;
 }

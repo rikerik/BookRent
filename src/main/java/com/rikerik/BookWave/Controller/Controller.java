@@ -1,12 +1,12 @@
 package com.rikerik.BookWave.Controller;
 
+import com.rikerik.BookWave.DAO.BookRepository;
 import com.rikerik.BookWave.DAO.UserRepository;
+import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +20,30 @@ public class Controller {
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
     private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
     @Autowired
 
-    public Controller(UserRepository userRepository) {
+    public Controller(UserRepository userRepository, BookRepository bookRepository) {
         this.userRepository = userRepository;
+        this.bookRepository = bookRepository;
     }
 
 
+    //TEST
+    @GetMapping("/getAllBooks")
+    public ResponseEntity<List<Book>> getBooks() {
+        List<Book> books = bookRepository.findAll();
+        if(books.isEmpty()){
+            logger.info("No books founds");
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        else {
 
+            logger.info("All books are listed");
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        }
+    }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getUsers() {
