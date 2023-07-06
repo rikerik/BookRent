@@ -5,8 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.util.Base64;
 
 @Entity
 @Table(name = "Books")
@@ -25,14 +30,22 @@ public class Book implements Serializable {
     )
     @Column(name = "bookId", nullable = false, columnDefinition = "serial")
     private long bookId;
-    @Column(name ="title", nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "description", nullable = false)
     private String description;
-    @Column(name = "author",nullable = false)
+    @Column(name = "author", nullable = false)
     private String authorName;
-    @Column(name = "available",nullable = false)
+    @Column(name = "available", nullable = false)
     private boolean isRented;
-    @Column (name = "image", columnDefinition = "bytea")
-    private byte[] image;
+    @Column(name = "imageByte", columnDefinition = "bytea")
+    private byte[] imageByte;
+    @Column(name = "imageBase64")
+    private String imageBase64;
+
+
+    public void setImageByte(byte[] imageByte) {
+        this.imageByte = imageByte;
+        this.imageBase64 = Base64.getEncoder().encodeToString(imageByte);
+    }
 }

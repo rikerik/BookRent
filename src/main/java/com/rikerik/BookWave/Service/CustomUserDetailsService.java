@@ -2,9 +2,9 @@ package com.rikerik.BookWave.Service;
 
 import com.rikerik.BookWave.DAO.UserRepository;
 
+import com.rikerik.BookWave.Model.CustomUserDetails;
 import com.rikerik.BookWave.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.
         UserDetailsService;

@@ -1,4 +1,4 @@
-package com.rikerik.BookWave.Service;
+package com.rikerik.BookWave.Model;
 
 import com.rikerik.BookWave.Model.User;
 import org.springframework.security.core.GrantedAuthority;

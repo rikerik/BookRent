@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link href="../static/css/tailwind.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>The Library</title>
+</head>
+<body>
+<div class="navbar  ">
+  <div class="navbar-start">
+    <a class="navbar-item">BookWave</a>
+    <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
+  </div>
+  <div class="navbar-center">
+    <a class="navbar-item" th:href="@{/login}">Login</a>
+    <a class="navbar-item" th:href="@{/register}">Register</a>
+    <a class="navbar-item" th:href="@{/library}">Books</a>
+  </div>
+  <div class="navbar-end">
+    <a class="navbar-item navbar-active"  th:href="@{/}">Home</a>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-3 my-2 d-flex align-content-stretch flex-wrap" th:each="book : ${books}">
+    <div class="card">
+      <td><img th:src="${'data:image/jpeg;charset=utf-8;base64,' + book.imageBase64}" alt=""></td>
+      <div class="card-body">
+        <h5 class="card-title" th:text="${book.title}">Product name</h5>
+        <p class="card-text" th:text="${book.description}">Product summary</p>
+        <p class="card-text" th:text="${book.authorName}">Product summary</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
