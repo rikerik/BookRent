@@ -6,13 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "Books")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Book {
+public class Book implements Serializable {
     @Id
     @SequenceGenerator(name = "BOOK_ID_SEQ",
             sequenceName = "BOOK_ID_SEQ",
@@ -31,7 +33,6 @@ public class Book {
     private String authorName;
     @Column(name = "available",nullable = false)
     private boolean isRented;
-    @Lob
     @Column (name = "image", columnDefinition = "bytea")
     private byte[] image;
 }
