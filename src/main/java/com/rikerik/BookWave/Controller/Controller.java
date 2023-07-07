@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+//Controller for user CRUD without UI
+
 @RestController
 public class Controller {
 
@@ -20,14 +22,9 @@ public class Controller {
     private final UserRepository userRepository;
 
     @Autowired
-
     public Controller(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-
-
-
 
     @GetMapping("/getAll")
     public ResponseEntity<List<User>> getUsers() {
@@ -61,12 +58,12 @@ public class Controller {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Object> register(@RequestParam("id") Long id,
-                                           @RequestParam("username") String username, //parameters for register new User
+    public ResponseEntity<Object> register(@RequestParam("id") Long id, //parameters for register new User
+                                           @RequestParam("username") String username,
                                            @RequestParam("password") String password,
                                            @RequestParam("email") String email) {
-        userRepository.save(User.builder()
-                .userId(id)//using lombok builder to make the User with the given parameters
+        userRepository.save(User.builder() //using lombok builder to make the User with the given parameters
+                .userId(id)
                 .username(username)
                 .password(password)
                 .email(email)

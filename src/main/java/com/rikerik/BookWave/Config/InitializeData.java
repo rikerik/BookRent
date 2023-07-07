@@ -8,9 +8,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
 import javax.sql.DataSource;
 
+//Class which fills the tables with pre-defined data for testing
 
 @Component
 public class InitializeData {
@@ -20,7 +20,7 @@ public class InitializeData {
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadData() {
-        // Load the SQL script
+        // Load the SQL script for users
         ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("InitUserData.sql"));
 
         // Encrypt the passwords

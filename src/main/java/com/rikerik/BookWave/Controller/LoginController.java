@@ -1,8 +1,6 @@
 package com.rikerik.BookWave.Controller;
 
-import com.rikerik.BookWave.DAO.BookRepository;
 import com.rikerik.BookWave.DAO.UserRepository;
-import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
+//Controller for login and registration
 @SpringBootApplication
 @Controller
 public class LoginController {

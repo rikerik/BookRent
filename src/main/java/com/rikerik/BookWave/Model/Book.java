@@ -5,11 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.ResponseEntity;
-
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.Base64;
 
@@ -42,10 +37,4 @@ public class Book implements Serializable {
     private byte[] imageByte;
     @Column(name = "imageBase64")
     private String imageBase64;
-
-
-    public void setImageByte(byte[] imageByte) {
-        this.imageByte = imageByte;
-        this.imageBase64 = Base64.getEncoder().encodeToString(imageByte);
-    }
 }

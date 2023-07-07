@@ -1,16 +1,13 @@
 package com.rikerik.BookWave.Model;
 
-import com.rikerik.BookWave.Model.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
-import java.util.Collections;
 
+//This class is for the user who is currently logs in
 public class CustomUserDetails implements UserDetails {
 
-    //This is for the actual user who logs in
+
     private User user;
 
     public CustomUserDetails(User user){
