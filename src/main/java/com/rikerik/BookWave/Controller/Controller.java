@@ -1,28 +1,14 @@
 package com.rikerik.BookWave.Controller;
 
-import com.rikerik.BookWave.DAO.BookRepository;
 import com.rikerik.BookWave.DAO.UserRepository;
-import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Model.User;
-import com.rikerik.BookWave.Service.BookResponseDTO;
-import javassist.bytecode.ByteArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
