@@ -20,3 +20,4 @@ spring:
     web-application-type: servlet
   thymeleaf:
     prefix: classpath:/templates/
+

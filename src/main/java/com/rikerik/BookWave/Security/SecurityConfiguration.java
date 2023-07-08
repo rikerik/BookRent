@@ -82,7 +82,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/register", "/js/**", "/css/**").permitAll()
+                        .requestMatchers("/register","/resources/**","/js/**", "/css/**").permitAll()
                         .anyRequest().authenticated() //the register page is available even without authentication
                 )
                 .formLogin((form) -> form

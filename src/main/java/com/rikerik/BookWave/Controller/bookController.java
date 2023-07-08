@@ -8,9 +8,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 //Controller for book operations
 @SpringBootApplication
@@ -37,9 +40,22 @@ public class bookController {
                 String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
                 book.setImageBase64(imageBase64); //iterating through the books and converting the bytes to images
             }
-            model.addAttribute("books", books);
             logger.info("All books are listed!");
+            model.addAttribute("books", books);
             return "library";
         }
     }
+
+    @PostMapping("/rent-book")
+    public String rentBook(@RequestParam("bookId") Long bookId) {
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            book.setRented(true);
+            bookRepository.save(book);
+            logger.info(book.getTitle() + " is rented");
+        }
+        return "redirect:/library"; // Redirect to the library
+    }
+
 }
