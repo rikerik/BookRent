@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +19,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 //Controller for login and registration
 @SpringBootApplication
 @Controller
-public class LoginController {
+public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(com.rikerik.BookWave.Controller.Controller.class);
     private final UserRepository userRepository;
 
     @Autowired
-    public LoginController(UserRepository userRepository) {
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -43,8 +48,16 @@ public class LoginController {
         }
     }
 
+    @Transactional //FOR TESTING REGISTER METHOD WITH PRE-FILLED DB
+    public void resetSequence() {
+        Long maxId = jdbcTemplate.queryForObject("SELECT MAX(id) FROM users", Long.class);
+        if (maxId != null) {
+            jdbcTemplate.execute("ALTER SEQUENCE ID_SEQ RESTART WITH " + (maxId + 1));
+        }
+    }
+
     @PostMapping("/register")
-    public String register(@RequestParam("username") String username, //parameters for register new User
+    public String register(@RequestParam("username") String username,
                            @RequestParam("password") String password,
                            @RequestParam("email") String email,
                            RedirectAttributes redirectAttributes) {
@@ -54,13 +67,17 @@ public class LoginController {
             redirectAttributes.addAttribute("error", "exists");
             return "register";
         }
-        userRepository.save(User.builder()  //using lombok builder to make the User with the given parameters
+
+        resetSequence(); // Reset the sequence before saving the new user
+
+        userRepository.save(User.builder()
                 .username(username)
                 .password(bCryptPasswordEncoder.encode(password))
                 .email(email)
                 .build());
+
         logger.info("User registered!");
-        redirectAttributes.addAttribute("succes", "true");
+        redirectAttributes.addAttribute("success", "true");
         return "login";
     }
 
@@ -89,5 +106,6 @@ public class LoginController {
     //if user logged in, remove login and register page
     //show the logged in user in every page
     //make table for book and a simple page for available books
+
 
 }
