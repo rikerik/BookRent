@@ -31,6 +31,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -45,6 +46,7 @@ public class SecurityConfiguration {
 
     @Autowired
     private UserDetailsService userDetailsService;
+    CookieClearingLogoutHandler cookies = new CookieClearingLogoutHandler("our-custom-cookie");
 
     @Bean
 // Configures and returns an AuthenticationProvider
@@ -82,7 +84,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/register","/resources/**","/js/**", "/css/**").permitAll()
+                        .requestMatchers("/register", "/resources/**", "/js/**", "/css/**").permitAll()
                         .anyRequest().authenticated() //the register page is available even without authentication
                 )
                 .formLogin((form) -> form
@@ -94,7 +96,7 @@ public class SecurityConfiguration {
                         .defaultSuccessUrl("/", true)
 
                 )
-                .logout(LogoutConfigurer::permitAll);
+                .logout((logout) -> logout.logoutSuccessUrl("/login").addLogoutHandler(cookies));
 
         return http.build();
     }

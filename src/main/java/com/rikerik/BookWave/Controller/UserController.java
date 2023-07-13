@@ -2,12 +2,17 @@ package com.rikerik.BookWave.Controller;
 
 import com.rikerik.BookWave.DAO.UserRepository;
 import com.rikerik.BookWave.Model.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -81,6 +86,15 @@ public class UserController {
         return "login";
     }
 
+    @PostMapping("/logout")
+    public String performLogout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/login";
+    }
+
     //Views
     @GetMapping("/") //to show the login form with get
     public String index() {
@@ -103,9 +117,9 @@ public class UserController {
     }
 
     //TODO
-    //if user logged in, remove login and register page
-    //show the logged in user in every page
-    //make table for book and a simple page for available books
-
-
+    //Write comments
+    //Do the roles
+    //Make renting work
+    //Make an index page
+    //make the ui better
 }

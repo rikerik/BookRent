@@ -15,8 +15,12 @@
         <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
     </div>
     <div class="navbar-center">
-        <a class="navbar-item" th:href="@{/login}">Login</a>
-        <a class="navbar-item" th:href="@{/register}">Register</a>
+        <div sec:authorize="isAuthenticated()">
+            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle">Sign out</a>
+            <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                <input hidden type="submit" value="Sign Out"/>
+            </form>
+        </div>
         <a class="navbar-item" th:href="@{/library}">Books</a>
     </div>
     <div class="navbar-end">
