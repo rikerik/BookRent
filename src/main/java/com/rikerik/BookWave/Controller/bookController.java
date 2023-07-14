@@ -46,16 +46,6 @@ public class bookController {
         }
     }
 
-    @PostMapping("/rent-book")
-    public String rentBook(@RequestParam("bookId") Long bookId) {
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            book.setRented(true);
-            bookRepository.save(book);
-            logger.info(book.getTitle() + " is rented");
-        }
-        return "redirect:/library"; // Redirect to the library
-    }
+
 
 }

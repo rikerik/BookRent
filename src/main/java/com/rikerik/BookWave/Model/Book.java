@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
-import java.util.Base64;
 
 @Entity
 @Table(name = "Books")
@@ -31,10 +31,13 @@ public class Book implements Serializable {
     private String description;
     @Column(name = "author", nullable = false)
     private String authorName;
-    @Column(name = "available", nullable = false)
+    @Column(name = "rented", nullable = false)
     private boolean isRented;
     @Column(name = "imageByte", columnDefinition = "bytea")
     private byte[] imageByte;
     @Column(name = "imageBase64")
     private String imageBase64;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user;
 }

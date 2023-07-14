@@ -57,7 +57,7 @@ public class UserController {
     public void resetSequence() {
         Long maxId = jdbcTemplate.queryForObject("SELECT MAX(id) FROM users", Long.class);
         if (maxId != null) {
-            jdbcTemplate.execute("ALTER SEQUENCE ID_SEQ RESTART WITH " + (maxId + 1));
+            jdbcTemplate.execute("ALTER SEQUENCE ID_SEQ RESTART WITH " + (maxId + 1)); //alter the sequence so it wont start with one
         }
     }
 
@@ -88,8 +88,12 @@ public class UserController {
 
     @PostMapping("/logout")
     public String performLogout(HttpServletRequest request, HttpServletResponse response) {
+        // Retrieves the Authentication object from the SecurityContextHolder
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Checks if there is an authenticated user
         if (authentication != null) {
+            // Creates a new instance of SecurityContextLogoutHandler and calls its logout method
+            // Clears the SecurityContext associated with the current user's session
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
         return "redirect:/login";

@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder //generating a builder pattern for the class
-public class User{
+public class User {
 
     @Id
     @SequenceGenerator(name = "ID_SEQ", // name of seq. gen.
@@ -38,5 +38,7 @@ public class User{
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role", nullable = true)
     private Roles Role;
+    @OneToMany(mappedBy = "user")
+    private List<Book> books;
 
 }
