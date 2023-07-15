@@ -31,10 +31,10 @@ public class RentController {
     }
 
     @PostMapping("/rentBook")
-    public String rentBook(@RequestParam("bookId") Long bookId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public String rentBook(@RequestParam("bookId") Long bookId) { //get bookId via html
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); //obtaining the currently authenticated user
         User user = userRepository.findByUsername(authentication.getName());
-        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        Optional<Book> optionalBook = bookRepository.findById(bookId); // find the book by id
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             book.setRented(true);

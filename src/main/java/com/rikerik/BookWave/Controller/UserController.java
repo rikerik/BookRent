@@ -123,7 +123,6 @@ public class UserController {
     //TODO
     //Write comments
     //Do the roles
-    //Make renting work
     //Make an index page
     //make the ui better
 }
