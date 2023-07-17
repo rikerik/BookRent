@@ -19,13 +19,13 @@ import java.util.List;
 //Controller for book operations
 @SpringBootApplication
 @Controller
-public class bookController {
+public class libraryController {
     private static final Logger logger = LoggerFactory.getLogger(com.rikerik.BookWave.Controller.Controller.class);
 
     private final BookRepository bookRepository;
     private final   UserRepository userRepository;
 
-    public bookController(BookRepository bookRepository, UserRepository userRepository) {
+    public libraryController(BookRepository bookRepository, UserRepository userRepository) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
     }

@@ -2,7 +2,7 @@
 <html class="scroll-smooth">
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<link href="../static/css/tailwind.css" rel="stylesheet">
+<link href="../static/css/tailwind.css" th:href="@{../static/css/tailwind.css}"  type="text/css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -16,50 +16,48 @@
     <div class="navbar-center">
         <a class="navbar-item" th:href="@{/login}">Login</a>
         <a class="navbar-item navbar-active" th:href="@{/register}">Register</a>
-        <a class="navbar-item" th:href="@{/library}">Library</a>
     </div>
     <div class="navbar-end">
-        <a class="navbar-item" th:href="@{/}">Home</a>
     </div>
 </div>
 
-    <div class="flex h-screen">
-        <div class="m-auto">
-            <form th:action="@{/register}" method="POST" autocomplete="off">
-                <div class="container">
-                    <div class="flex flex-col justify-center items-center">
-                        <label>Username:</label>
-                        <label>
-                            <input class="input-ghost-primary input" type="text" placeholder="Enter Username"
-                                   name="username"
-                                   required>
-                        </label>
-                    </div>
-                    <div class="flex flex-col justify-center items-center">
-
-                        <label>Password:</label>
-                        <label>
-                            <input class="input-ghost-primary input" type="password" placeholder="Enter Password"
-                                   name="password"
-                                   required>
-                        </label>
-                    </div>
-                    <div class="flex flex-col justify-center items-center">
-
-                        <label>Email:</label>
-                        <label>
-                            <input class="input-ghost-primary input" type="text" placeholder="Enter email"
-                                   name="email"
-                                   required>
-                        </label>
-                    </div>
-                    <div class="btn btn-primary btn-block flex flex-col justify-center items-center my-4 mx-0">
-                        <button type="submit">Register</button>
-                    </div>
+<div class="flex h-screen">
+    <div class="m-auto">
+        <form th:action="@{/register}" method="POST" autocomplete="off">
+            <div class="container">
+                <div class="flex flex-col justify-center items-center">
+                    <label>Username:</label>
+                    <label>
+                        <input class="input-ghost-primary input" type="text" placeholder="Enter Username"
+                               name="username"
+                               required>
+                    </label>
                 </div>
-            </form>
-        </div>
+                <div class="flex flex-col justify-center items-center">
+
+                    <label>Password:</label>
+                    <label>
+                        <input class="input-ghost-primary input" type="password" placeholder="Enter Password"
+                               name="password"
+                               required>
+                    </label>
+                </div>
+                <div class="flex flex-col justify-center items-center">
+
+                    <label>Email:</label>
+                    <label>
+                        <input class="input-ghost-primary input" type="text" placeholder="Enter email"
+                               name="email"
+                               required>
+                    </label>
+                </div>
+                <div class="btn btn-primary btn-block flex flex-col justify-center items-center my-4 mx-0">
+                    <button type="submit">Register</button>
+                </div>
+            </div>
+        </form>
     </div>
+</div>
 </form>
 </body>
 </html>

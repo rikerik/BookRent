@@ -1,15 +1,10 @@
 <!DOCTYPE HTML>
 <html class="scroll-smooth" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-
-
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../static/css/tailwind.css" rel="stylesheet">
-    <link href="../static/css/tailwind.css" rel="stylesheet">
-
+    <link href="../static/css/tailwind.css" th:href="@{../static/css/tailwind.css}"  type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <title> Login page </title>
 </head>
 
@@ -20,22 +15,19 @@
         <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
     </div>
     <div class="navbar-center">
+        <a class="navbar-item" th:href="@{/library}">Library</a>
+        <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
+        <a class="navbar-item navbar-active" th:href="@{/}">Home</a>
+    </div>
+    <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
             <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle">Sign out</a>
             <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-                <input hidden type="submit" value="Sign Out" />
+                <input hidden type="submit" value="Sign Out"/>
             </form>
         </div>
-        <a class="navbar-item" th:href="@{/library}">Library</a>
-        <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
-
-    </div>
-    <div class="navbar-end">
-        <a class="navbar-item navbar-active"  th:href="@{/}">Home</a>
     </div>
 </div>
-
-
 
 
 </body>
