@@ -44,7 +44,7 @@
                 <p class="card-text text-base text-gray-600" th:text="${book.authorName}">Author</p>
                 <form th:action="@{/rentBook}" method="post">
                     <input type="hidden" name="bookId" th:value="${book.bookId}">
-                    <button type="submit"
+                    <button onclick="rentFunction()" type="submit"
                             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         Rent the Book
                         <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"

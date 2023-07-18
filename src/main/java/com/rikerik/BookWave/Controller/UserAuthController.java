@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 //Controller for login and registration
 @SpringBootApplication
 @Controller
-public class UserController {
+public class UserAuthController {
     private static final Logger logger = LoggerFactory.getLogger(com.rikerik.BookWave.Controller.Controller.class);
     private final UserRepository userRepository;
 
@@ -32,7 +32,7 @@ public class UserController {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserAuthController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
