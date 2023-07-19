@@ -5,3 +5,4 @@ function rentFunction() {
 function registerBook(){
     alert("Book added to library!")
 }
+

@@ -121,7 +121,6 @@ public class UserAuthController {
     }
 
     //TODO
-    //Write comments
     //Do the roles
     //Make an index page
     //make the ui better
