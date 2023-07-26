@@ -1,0 +1,11 @@
+services:
+  postgres:
+    network_mode: host
+    image: postgres:latest
+    container_name: BookWave
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: BookWave
+    ports:
+      - "5432:5432"
