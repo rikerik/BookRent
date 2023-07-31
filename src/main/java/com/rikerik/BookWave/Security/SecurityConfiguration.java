@@ -85,6 +85,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/register", "/resources/**", "/js/**", "/css/**").permitAll()
+                        .requestMatchers("/BookAddingPage").hasRole("ADMIN")
                         .anyRequest().authenticated() //the register page is available even without authentication
                 )
                 .formLogin((form) -> form

@@ -40,6 +40,9 @@
         <a class="navbar-item" th:href="@{/library}">Library</a>
         <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
         <a class="navbar-item navbar-active" th:href="@{/}">Home</a>
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <a class="navbar-item" th:href="@{/BookAddingPage}">Book adding page (for admins)</a>
+        </div>
     </div>
     <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
