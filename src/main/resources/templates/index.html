@@ -8,24 +8,46 @@
 
     <title> Login page </title>
     <style>
-        html, body {
+        body, html {
+            margin: 0;
+            padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: white;
         }
 
-        svg {
+        #background-container {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .iframe-container {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
         }
 
-        path {
-            fill: none;
-            stroke: black;
-            stroke-width: 5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .overlay-text {
+            position: absolute;
+            top: 12vh;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: Monaco,math ;
+            font-size: 72px;
+            font-weight: bold;
+            color: #6a662d;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -54,6 +76,16 @@
     </div>
 </div>
 
-<!--Make a simple index with full screen video and simple text over it-->
+
+<div id="background-container">
+    <div class=" iframe-container">
+        <div style="width:100%;height:0;padding-bottom:88%;position:absolute;">
+            <iframe src="https://giphy.com/embed/EshBrE0Y0Uz8QuAVfA" width="100%" height="100%" style="position:absolute"
+                    frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        </div>
+    </div>
+    <div class="overlay-text  ">BookWave</div>
+</div>
+
 </body>
 </html>

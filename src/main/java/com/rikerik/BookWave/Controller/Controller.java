@@ -71,4 +71,5 @@ public class Controller {
         logger.info("User updated!");
         return new ResponseEntity<>("User updated!", HttpStatus.CREATED);
     }
+
 }

@@ -14,10 +14,8 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -50,26 +48,6 @@ public class BookController {
         }
     }
 
-    @GetMapping("/getAllBooks")
-    public String getAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        if (books.isEmpty()) {
-            logger.info("No users found");
-            return "BookAddingPage";
-        } else {
-            logger.info("All users are listed");
-            return "BookAddingPage";
-        }
-    } //finish
-
-    @GetMapping("/getBookById")
-    public String getBookById(@RequestParam("id") Long id) {
-        Optional<Book> book = bookRepository.findById(id);
-        if (book.isPresent()) {
-            return "BookById";
-        } else return "BookById";
-    } //finish
-
     @PostMapping("/registerBook")
     public String registerBook(@RequestParam("authorName") String authorName,
                                @RequestParam("title") String title,
@@ -101,15 +79,14 @@ public class BookController {
         return "BookAddingPage";
     }
 
-    @DeleteMapping("/deleteBook")
-    public String deleteBook(@RequestParam("id") Long id) {
-        bookRepository.deleteById(id);
-        return "BookAddingPage";
-    } //finish
-
-
     @GetMapping("/BookAddingPage")
     public String register() {
         return "BookAddingPage";
+    }
+
+
+    @GetMapping("/allBooks")
+    public String allBooks() {
+        return "allBooks";
     }
 }
