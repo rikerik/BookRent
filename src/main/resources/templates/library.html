@@ -20,8 +20,10 @@
         <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
     </div>
     <div class="navbar-center">
-        <a class="navbar-item navbar-active" th:href="@{/library}">Library</a>
-        <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
+        <div sec:authorize="hasRole('ROLE_USER')">
+            <a class="navbar-item" th:href="@{/library}">Library</a>
+            <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
+        </div>
         <a class="navbar-item" th:href="@{/}">Home</a>
 
     </div>
@@ -83,8 +85,9 @@
                             Rent the Book
                             <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M1 5h12m0 0L9 1m4 4L9 9"/>
                             </svg>
                         </button>
                     </form>

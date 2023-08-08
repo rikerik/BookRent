@@ -20,9 +20,11 @@
     <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
   </div>
   <div class="navbar-center">
-    <a class="navbar-item navbar-active" th:href="@{/library}">Library</a>
-    <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
     <a class="navbar-item" th:href="@{/}">Home</a>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+      <a class="navbar-item" th:href="@{/BookAddingPage}">Book adding page (for admins)</a>
+      <a class="navbar-item navbar-active" th:href="@{/listBooks}">All books</a>
+    </div>
 
   </div>
   <div class="navbar-end">

@@ -87,4 +87,19 @@ public class libraryController {
         return "redirect:/library"; // Redirect to the library
     }
 
+    @PostMapping("/returnBook")
+    public String returnBook(@RequestParam("bookId") Long bookId) { //get bookId via html
+        User admin = userRepository.findByUsername("Admin"); // to find the admin
+        Optional<Book> optionalBook = bookRepository.findById(bookId); // find the book by id
+        if (optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            book.setRented(false);
+            book.setUser(admin);
+            bookRepository.save(book);
+            logger.info(book.getTitle() + " is rented");
+        }
+        return "redirect:/UserLibrary"; // Redirect to the library
+    }
+
+
 }

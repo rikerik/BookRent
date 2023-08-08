@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,11 +80,25 @@ public class BookController {
         return "BookAddingPage";
     }
 
+    @GetMapping("/listBooks")
+    public String Books(Model model) { // add the books to the model so the View will be able to use it
+        List<Book> books = bookRepository.findAll();
+        if (books.isEmpty()) {
+            logger.info("No books are found!");
+        } else {
+            for (Book book : books) {
+                String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
+                book.setImageBase64(imageBase64); //iterating through the books and converting the bytes to images
+            }
+            logger.info("All books are listed!");
+            model.addAttribute("books", books);
+        }
+        return "allBooks";
+    }
     @GetMapping("/BookAddingPage")
     public String register() {
         return "BookAddingPage";
     }
-
 
     @GetMapping("/allBooks")
     public String allBooks() {
