@@ -23,7 +23,7 @@
     </div>
     <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
-            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle">Sign out</a>
+            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle navbar-item">Sign out</a>
             <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
                 <input hidden type="submit" value="Sign Out"/>
             </form>

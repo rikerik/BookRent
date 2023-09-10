@@ -1,6 +1,7 @@
 package com.rikerik.BookWave.Controller;
 
 import com.rikerik.BookWave.DAO.UserRepository;
+import com.rikerik.BookWave.Model.Roles;
 import com.rikerik.BookWave.Model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -79,6 +80,7 @@ public class UserAuthController {
                 .username(username)
                 .password(bCryptPasswordEncoder.encode(password))
                 .email(email)
+                .Role(Roles.USER)
                 .build());
 
         logger.info("User registered!");

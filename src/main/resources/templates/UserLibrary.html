@@ -17,13 +17,13 @@
     <div class="navbar-center">
         <div sec:authorize="hasRole('ROLE_USER')">
             <a class="navbar-item" th:href="@{/library}">Library</a>
-            <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
+            <a class="navbar-item navbar-active" th:href="@{/UserLibrary}">User Library</a>
         </div>
         <a class="navbar-item" th:href="@{/}">Home</a>
     </div>
     <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
-            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle">Sign out</a>
+            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle navbar-item">Sign out</a>
             <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
                 <input hidden type="submit" value="Sign Out"/>
             </form>

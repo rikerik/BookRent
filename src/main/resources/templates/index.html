@@ -8,42 +8,28 @@
 
     <title> Login page </title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+        .image-container {
+            --tw-gradient-from-position: blue;
+            height: 94vh;
+
+            background-color: #2d3436;
+            background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
+
+            display: flex;
+            flex-direction: row; /* Change to 'row' to display items next to each other */
+            align-items: center;
+            justify-content: center;
+        }
+        .divider-h{
+            height: 45vh;
         }
 
-        #background-container {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
-
-        .iframe-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
         .overlay-text {
             position: absolute;
             top: 12vh;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-family: Monaco,math ;
+            font-family: Monaco, math;
             font-size: 72px;
             font-weight: bold;
             color: #6a662d;
@@ -71,7 +57,7 @@
     </div>
     <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
-            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle">Sign out</a>
+            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle navbar-item">Sign out</a>
             <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
                 <input hidden type="submit" value="Sign Out"/>
             </form>
@@ -80,14 +66,45 @@
 </div>
 
 
-<div id="background-container">
-    <div class=" iframe-container">
-        <div style="width:100%;height:0;padding-bottom:88%;position:absolute;">
-            <iframe src="https://giphy.com/embed/EshBrE0Y0Uz8QuAVfA" width="100%" height="100%" style="position:absolute"
-                    frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+
+<div class="image-container bg-gradient-to-r from-gray-700 via-gray-900 to-black ">
+    <div class="card card-image-cover ">
+        <img src="https://rtrfm.com.au/wp-content/uploads/2021/04/istockphoto-1158413597-612x612-816x459.jpg"
+             alt=""/>
+        <div class="card-body">
+            <h2 class="card-header">Start you reading journey!</h2>
+            <p class="text-content2">We have all the books that you are desire, you just have to look!</p>
+            <p>                Rent now!
+            </p>
+            <div class="card-footer">
+                <a class="navbar-item" th:href="@{/library}">
+                    <button class="btn-secondary btn">Check the library</button>
+                </a>
+            </div>
         </div>
     </div>
+    <div class="divider-h">
+        <div class="divider divider-vertical h-44 ">OR</div>
+
+    </div>
+
+    <div class="card card-image-cover ">
+        <img src="https://dnx0p3318h4eh.cloudfront.net/My%20project-1%20(3).png"
+             alt=""/>
+        <div class="card-body">
+            <h2 class="card-header">Browse your library.</h2>
+            <p class="text-content2">Let's see your own collection of books!
+                To your library!</p>
+            <div class="card-footer">
+                <a class="navbar-item" th:href="@{/UserLibrary}">
+                    <button class="btn-secondary btn">Check your library</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <div class="overlay-text  ">BookWave</div>
+
 </div>
 
 </body>
