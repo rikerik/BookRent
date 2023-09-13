@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
 
 
-    <title> Login page </title>
+    <title> Index </title>
     <style>
         .image-container {
             --tw-gradient-from-position: blue;
@@ -51,7 +51,7 @@
         </div>
         <a class="navbar-item navbar-active" th:href="@{/}">Home</a>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
-            <a class="navbar-item" th:href="@{/BookAddingPage}">Book adding page (for admins)</a>
+            <a class="navbar-item" th:href="@{/BookAddingPage}">Book adding page</a>
             <a class="navbar-item" th:href="@{/listBooks}">All books</a>
         </div>
     </div>
