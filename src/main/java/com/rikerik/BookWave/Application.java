@@ -16,6 +16,14 @@ public class Application {
         SpringApplication.run(Application.class, args);
 
     }
+//TODO
+    //egyedi prefrencia alapján ajánl könyveket, ehhez kell szűrés
+    //pl cimkék, témák vagy írok
+    //Adminként felhasznélók kezelése
+
+    //könyvklubb létrehozása pl, ha ki lett bérelve egy adott műfajból több könyv, ide lehet kell chat
+    //naponta sorsolás adott könyvekből, ha a sorsolt könyv a felhasználó könyvtárában van, akkor kap valami egyedit
+
 
 
 }
