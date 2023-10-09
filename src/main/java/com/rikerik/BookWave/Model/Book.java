@@ -31,6 +31,10 @@ public class Book implements Serializable {
     private String description;
     @Column(name = "author", nullable = false)
     private String authorName;
+    @Column(name = "genre", nullable = false)  //ezeket működésre bírni
+    private String genres;
+    @Column(name = "label", nullable = false) //ezeket működésre bírni
+    private String labels;
     @Column(name = "rented", nullable = false)
     private boolean isRented;
     @Column(name = "imageByte", columnDefinition = "bytea")

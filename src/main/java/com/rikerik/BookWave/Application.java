@@ -18,7 +18,7 @@ public class Application {
     }
 //TODO
     //egyedi prefrencia alapján ajánl könyveket, ehhez kell szűrés
-    //pl cimkék, témák vagy írok
+    //pl cimkék, műfaj vagy írok
     //Adminként felhasznélók kezelése
 
     //könyvklubb létrehozása pl, ha ki lett bérelve egy adott műfajból több könyv, ide lehet kell chat
