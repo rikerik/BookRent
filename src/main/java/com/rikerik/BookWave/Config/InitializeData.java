@@ -20,6 +20,7 @@ public class InitializeData {
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadData() {
+        /*
         // Load the SQL script for users
         ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("InitUserData.sql"));
 
@@ -45,5 +46,7 @@ public class InitializeData {
 
         resourceDatabasePopulator.setContinueOnError(true);
         resourceDatabasePopulator.execute(dataSource);
+        /*
+         */
     }
 }

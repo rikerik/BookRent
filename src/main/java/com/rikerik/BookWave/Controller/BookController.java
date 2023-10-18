@@ -52,6 +52,8 @@ public class BookController {
     @PostMapping("/registerBook")
     public String registerBook(@RequestParam("authorName") String authorName,
                                @RequestParam("title") String title,
+                               @RequestParam("genre") String genre,
+                               @RequestParam("labels") String labels,
                                @RequestParam("description") MultipartFile descriptionFile, //Multipart file to work with uploaded txt and image
                                @RequestParam("image") MultipartFile imageFile,
                                RedirectAttributes redirectAttributes) {
@@ -67,6 +69,8 @@ public class BookController {
                 bookRepository.save(Book.builder() // save the book
                         .authorName(authorName)
                         .title(title)
+                        .genres(genre)
+                        .labels(labels)
                         .description(descriptionText)
                         .imageByte(imageFile.getBytes())
                         .isRented(false)
