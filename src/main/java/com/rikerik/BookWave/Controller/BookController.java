@@ -20,9 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @SpringBootApplication
 @Controller
@@ -69,7 +67,7 @@ public class BookController {
                 bookRepository.save(Book.builder() // save the book
                         .authorName(authorName)
                         .title(title)
-                        .genres(genre)
+                        .genre(genre)
                         .labels(labels)
                         .description(descriptionText)
                         .imageByte(imageFile.getBytes())
@@ -108,4 +106,60 @@ public class BookController {
     public String allBooks() {
         return "allBooks";
     }
+
+
+    //search for books, almost the same as list books
+
+    // Helper method to convert a Book to a list
+    private List<Book> convertToBookList(Book book) {
+        List<Book> bookList = new ArrayList<>();
+        if (book != null) {
+            bookList.add(book);
+        }
+        return bookList;
+    }
+
+    @GetMapping("/bookSearch")
+    public String bookSearch(@RequestParam(value = "attribute", defaultValue = "genre") String attribute,
+                             @RequestParam(value = "searchValue", required = false) String searchValue,
+                             Model model) {
+        List<Book> books = new ArrayList<>();
+
+        if (searchValue != null && !searchValue.isEmpty()) {
+            books = switch (attribute) {
+                case "author" -> {
+                    Book authorBook = bookRepository.findByAuthorName(searchValue);
+                    yield convertToBookList(authorBook);
+                }
+                case "title" -> {
+                    Book titleBook = bookRepository.findByTitle(searchValue);
+                    yield convertToBookList(titleBook);
+                }
+                default -> {
+                    Book genreBook = bookRepository.findByGenre(searchValue);
+                    yield convertToBookList(genreBook);
+                }
+            };
+        } else {
+            books = bookRepository.findAll();
+        }
+
+        if (books.isEmpty()) {
+            model.addAttribute("message", "No books found for the specified " + attribute + ": " + searchValue);
+        } else {
+            for (Book book : books) {
+                String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
+                book.setImageBase64(imageBase64);
+            }
+        }
+
+        model.addAttribute("books", books);
+        model.addAttribute("selectedAttribute", attribute);
+        model.addAttribute("searchValue", searchValue);
+        return "bookSearch";
+    }
+
+
+
+
 }

@@ -32,7 +32,7 @@ public class Book implements Serializable {
     @Column(name = "author", nullable = false)
     private String authorName;
     @Column(name = "genre", nullable = true)  //ezeket működésre bírni
-    private String genres;
+    private String genre;
     @Column(name = "label", nullable =true) //ezeket működésre bírni
     private String labels;
     @Column(name = "rented", nullable = false)
