@@ -49,6 +49,8 @@
             <a class="navbar-item" th:href="@{/library}">Library</a>
             <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
             <a class="navbar-item" th:href="@{/bookSearch}">Search books</a>
+            <a class="navbar-item" th:href="@{/chattest}">chat</a>
+
         </div>
         <a class="navbar-item navbar-active" th:href="@{/}">Home</a>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
