@@ -1,6 +1,6 @@
-# BookWave
+# BookWave****
 
-![kép](https://github.com/rikerik/BookWave/assets/114222442/3ffb24dd-7d42-4c0a-b2a4-f98545fbf6bf)
+![kép](bookwave.png)
 
 
 BookWave is a simple book rental application built with Spring Boot for the backend and featuring a sleek and intuitive frontend design using Tailwind CSS and Ripple UI.<br/>

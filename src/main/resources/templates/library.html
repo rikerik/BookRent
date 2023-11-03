@@ -37,29 +37,7 @@
     </div>
 </div>
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>Book Flip Effect</title>
-</head>
-
-<body>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>Book Flip Effect</title>
-</head>
-
-<body>
 <div class="flex flex-row flex-wrap">
     <div class="p-6 w-auto" th:each="book : ${books}" th:if="${not book.isRented}">
         <div class="card ml-10 mt-5 p-6 h-full relative group">
@@ -105,6 +83,3 @@
 
 <script type="text/javascript" th:src="@{/js/script.js}"></script>
 
-
-</body>
-</html>

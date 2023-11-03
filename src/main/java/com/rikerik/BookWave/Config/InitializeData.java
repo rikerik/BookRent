@@ -20,7 +20,7 @@ public class InitializeData {
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadData() {
-        /*
+        /* Only for testing and filling the db if its empty
         // Load the SQL script for users
         ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8", new ClassPathResource("InitUserData.sql"));
 

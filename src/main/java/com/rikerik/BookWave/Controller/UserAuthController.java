@@ -123,7 +123,7 @@ public class UserAuthController {
     }
 
     //TODO
-    //Do the roles
-    //Make an index page
-    //make the ui better
+    //finish chat
+    //make it responsive
+    //number of books which is rentable
 }

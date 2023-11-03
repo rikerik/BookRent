@@ -1,8 +1,8 @@
 function rentFunction() {
-    alert("Book is rented!");
+    alert("Book rented!");
 }
 function returnFunction() {
-    alert("Book is returned to the library!");
+    alert("Book returned to the library!");
 }
 function registerBook(){
     alert("Book added to library!")
