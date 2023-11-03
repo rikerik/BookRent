@@ -1,4 +1,4 @@
-# BookWave****
+# BookWave
 
 ![kép](bookwave.png)
 
