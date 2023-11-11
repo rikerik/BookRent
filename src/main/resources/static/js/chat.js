@@ -1,33 +1,31 @@
 'use strict';
 
-var usernamePage = document.querySelector('#username-page');
-var chatPage = document.querySelector('#chat-page');
-var usernameForm = document.querySelector('#usernameForm');
 var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
 var messageArea = document.querySelector('#messageArea');
 var connectingElement = document.querySelector('.connecting');
 
 var stompClient = null;
-var username = null;
+var username = document.querySelector('#username');
 
 var colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
 
-function connect(event) {
-    username = document.querySelector('#name').value.trim();
+window.onload = function() {
+    connect(event);
+};
 
-    if(username) {
-        usernamePage.classList.add('hidden');
-        chatPage.classList.remove('hidden');
+function connect(event) {
+
+
 
         var socket = new SockJS('/websocket');
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, onConnected, onError);
-    }
+
     event.preventDefault();
 }
 
@@ -39,8 +37,9 @@ function onConnected() {
     // Tell your username to the server
     stompClient.send("/app/chat.register",
         {},
-        JSON.stringify({sender: username, type: 'JOIN'})
-    )
+        JSON.stringify({sender: username.innerText, type: 'JOIN'})
+    );
+
 
     connectingElement.classList.add('hidden');
 }
@@ -57,7 +56,7 @@ function send(event) {
 
     if(messageContent && stompClient) {
         var chatMessage = {
-            sender: username,
+            sender: username.innerText,
             content: messageInput.value,
             type: 'CHAT'
         };
@@ -117,5 +116,4 @@ function getAvatarColor(messageSender) {
     return colors[index];
 }
 
-usernameForm.addEventListener('submit', connect, true)
 messageForm.addEventListener('submit', send, true)
