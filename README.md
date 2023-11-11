@@ -1,4 +1,4 @@
-# BookWave****
+# BookWave
 
 ![kép](bookwave.png)
 
@@ -10,6 +10,7 @@ BookWave is a simple book rental application built with Spring Boot for the back
     Convenient book rental process.
     User-friendly interfaces for an effortless experience.
     Admin capabilities for book management and user administration.
+    Search for books by genre, author, or title.
 
 
 
