@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-html,body {
+html, body {
     height: 100%;
     overflow: hidden;
 }
@@ -17,26 +17,8 @@ body {
     font-size: 1rem;
     line-height: 1.58;
     color: #333;
-    /*  background-color: #f4f4f4; */
+    background-color: #f4f4f4;
     height: 100%;
-
-
-
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-body:before {
-    height: 50%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-   // background: maxresdefault.jpg;
-    content: "";
-    z-index: 0;
 }
 
 .clearfix:after {
@@ -75,7 +57,7 @@ h1 {
 }
 
 a {
-    color: #128ff2;
+    color: #6db33f;
 }
 
 button {
@@ -100,15 +82,32 @@ button.default {
 }
 
 button.primary {
-    background-color: #25be38;
+    background-color: #6db33f;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
     color: #fff;
 }
 
 button.accent {
-    background-color: #1778dd;
+    background-color: #6db33f;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
     color: #fff;
+}
+
+.button-group {
+    display: flex;
+}
+
+.button-group button {
+    margin-left: 5px;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.button-group button:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#leaveButton {
+    background: red
 }
 
 #username-page {
@@ -227,7 +226,7 @@ button.accent {
 
 #messageForm .input-group input {
     float: left;
-    width: calc(100% - 85px);
+    width: calc(100% - 150px);
 }
 
 #messageForm .input-group button {

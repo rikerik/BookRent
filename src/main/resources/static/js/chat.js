@@ -4,6 +4,7 @@ var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
 var messageArea = document.querySelector('#messageArea');
 var connectingElement = document.querySelector('.connecting');
+var leaveButton = document.querySelector('#leaveButton');
 
 var stompClient = null;
 var username = document.querySelector('#username');
@@ -21,10 +22,10 @@ function connect(event) {
 
 
 
-        var socket = new SockJS('/websocket');
-        stompClient = Stomp.over(socket);
+    var socket = new SockJS('/websocket');
+    stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, onConnected, onError);
+    stompClient.connect({}, onConnected, onError);
 
     event.preventDefault();
 }
@@ -103,6 +104,23 @@ function onMessageReceived(payload) {
 
     messageArea.appendChild(messageElement);
     messageArea.scrollTop = messageArea.scrollHeight;
+}
+
+leaveButton.addEventListener('click', leaveChat, true);
+
+function leaveChat() {
+    if (stompClient) {
+        var leaveMessage = {
+            sender: username.innerText,
+            type: 'LEAVE'
+        };
+
+        stompClient.send("/app/chat.leave", {}, JSON.stringify(leaveMessage));
+        stompClient.disconnect(); // Disconnect the user
+
+        // Redirect to the index page after leaving
+        window.location.href = '/';
+    }
 }
 
 

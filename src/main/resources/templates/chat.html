@@ -18,7 +18,7 @@
 <div id="chat-page">
     <div class="chat-container">
         <div class="chat-header">
-            <h2>ChatBox</h2>
+            <h2>Chat</h2>
         </div>
         <div class="connecting">Connecting to the chat...</div>
         <ul id="messageArea">
@@ -29,7 +29,11 @@
                 <div class="input-group clearfix">
                     <input type="text" id="message" placeholder="Type a message..."
                            autocomplete="off" class="form-control" />
-                    <button type="submit" class="primary">Send</button>
+                    <div class="button-group">
+                        <button type="submit" class="primary">Send</button>
+                        <button id="leaveButton" class="primary">Leave</button>
+                    </div>
+
                 </div>
             </div>
         </form>

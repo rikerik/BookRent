@@ -32,12 +32,17 @@ public class ChatController {
         return chatMessage;
     }
 
-    @GetMapping("/chattest") //to show the login form with get
+    @MessageMapping("/chat.leave")
+    @SendTo("/topic/public")
+    public ChatMessage leaveChat(@Payload ChatMessage chatMessage) {
+        return chatMessage;
+    }
+    @GetMapping("/chat") //to show the login form with get
     public String index(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         model.addAttribute("username", username);
-        return "chattest";
+        return "chat";
 
     }
 
