@@ -108,40 +108,38 @@ public class BookController {
     //search for books, almost the same as list books
 
     // Helper method to convert a Book to a list
-    private List<Book> convertToBookList(Book book) {
-        List<Book> bookList = new ArrayList<>();
-        if (book != null) {
-            bookList.add(book);
-        }
-        return bookList;
-    }
 
     @GetMapping("/bookSearch")
     public String bookSearch(@RequestParam(value = "attribute", defaultValue = "genre") String attribute,
                              @RequestParam(value = "searchValue", required = false) String searchValue,
                              Model model) {
-        List<Book> books = new ArrayList<>();
+        List<Book> books;
 
         if (searchValue != null && !searchValue.isEmpty()) {
-            books = switch (attribute) {
+            // Alakítsd az összes karaktert kisbetűvé a címeknél és íróknál
+            String searchValueLowerCase = searchValue.toLowerCase();
+
+            switch (attribute) {
                 case "author" -> {
-                    Book authorBook = bookRepository.findByAuthorName(searchValue);
-                    yield convertToBookList(authorBook);
+                    books = bookRepository.findByAuthorNameILike(searchValueLowerCase);
                 }
                 case "title" -> {
-                    Book titleBook = bookRepository.findByTitle(searchValue);
-                    yield convertToBookList(titleBook);
+                    books = bookRepository.findByTitleILike(searchValueLowerCase);
                 }
                 default -> {
-                    Book genreBook = bookRepository.findByGenre(searchValue);
-                    yield convertToBookList(genreBook);
+                    books = bookRepository.findByGenreILike(searchValueLowerCase);
                 }
             };
         } else {
             books = bookRepository.findAll();
         }
 
-        if (books.isEmpty()) {
+        int numberOfBooks = books.size(); // Könyvek számának megszámolása
+
+        // Logolás a konzolon
+        System.out.println("Number of books found: " + numberOfBooks);
+
+        if (numberOfBooks == 0) {
             model.addAttribute("message", "No books found for the specified " + attribute + ": " + searchValue);
         } else {
             for (Book book : books) {
@@ -153,8 +151,13 @@ public class BookController {
         model.addAttribute("books", books);
         model.addAttribute("selectedAttribute", attribute);
         model.addAttribute("searchValue", searchValue);
+
+
         return "bookSearch";
     }
+
+
+
 
 
 

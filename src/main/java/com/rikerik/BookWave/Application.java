@@ -12,5 +12,9 @@ public class Application {
 
     }
 
-
+//TODO
+    //chat tematikák elkészítése és bérelt könyvek alapján besorolás
+    //mennyiség a könyveknél
+    //admin felület a különböző tevékenységek elvégzésére
+    //a keresésnél ne csak pontos találat esetén adjon választ (pl kisbetű nagybetű között nincs különbség)
 }
