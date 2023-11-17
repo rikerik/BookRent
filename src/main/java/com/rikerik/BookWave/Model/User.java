@@ -1,39 +1,50 @@
 package com.rikerik.BookWave.Model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-
-@Entity // to map object to db
-@Table(name = "Users") //name the table
-@Data //generates all boilerplate code, like getters and setters
+@Entity
+@Table(name = "Users")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder //generating a builder pattern for the class
+@Builder
 public class User {
 
     @Id
-    @SequenceGenerator(name = "ID_SEQ", // name of seq. gen.
-            sequenceName = "ID_SEQ", //db seq. name for generating pk values
+    @SequenceGenerator(name = "ID_SEQ",
+            sequenceName = "ID_SEQ",
             allocationSize = 1)
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE, //generating by sequence
-            generator = "ID_SEQ" //the name of the generator
+            strategy = GenerationType.SEQUENCE,
+            generator = "ID_SEQ"
     )
     @Column(name = "id", nullable = false, columnDefinition = "serial")
     private long userId;
+
     @Column(name = "username", nullable = false)
     private String username;
+
     @Column(name = "password", nullable = false)
     private String password;
+
     @Column(name = "email", nullable = false)
     private String email;
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role", nullable = true)
     private Roles Role;
-    @OneToMany(mappedBy = "user")
-    private List<Book> books;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Book> books = new HashSet<>();
+
+    public void addBook(Book book) {
+        this.books.add(book);
+        book.getUsers().add(this);
+    }
 
 }

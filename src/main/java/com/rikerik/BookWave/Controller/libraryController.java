@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 //Controller for book operations
 @SpringBootApplication
@@ -55,50 +56,86 @@ public class libraryController {
     public String userLibrary(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); //obtaining the currently authenticated user
         User user = userRepository.findByUsername(authentication.getName());
-        long userId = user.getUserId();
-        List<Book> books = bookRepository.findAll();
-        if (books.isEmpty()) {
-            logger.info("No books are found!");
+
+
+        List<Book> userBooks = bookRepository.findByUsers(user);
+        if (userBooks.isEmpty()) {
+            logger.info("No books are found for the user!");
         } else {
-            for (Book book : books) {
+            for (Book book : userBooks) {
                 String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
-                book.setImageBase64(imageBase64); //iterating through the books and converting the bytes to images
+                book.setImageBase64(imageBase64);
             }
-            logger.info("All books are listed!");
-            model.addAttribute("userId", userId);
-            model.addAttribute("books", books);
+            logger.info("User's books are listed!");
+
+
+            model.addAttribute("books", userBooks);
         }
         return "UserLibrary";
     }
-
     //rents book from the library and adds to the library
+
     @PostMapping("/rentBook")
-    public String rentBook(@RequestParam("bookId") Long bookId) { //get bookId via html
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); //obtaining the currently authenticated user
+    public String rentBook(@RequestParam("bookId") Long bookId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUsername(authentication.getName());
-        Optional<Book> optionalBook = bookRepository.findById(bookId); // find the book by id
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            book.setRented(true);
-            book.setUser(user);
-            bookRepository.save(book);
-            logger.info(book.getTitle() + " is rented");
+
+            if (book.getBookAmount() > 0) {
+                try {
+                    // Decrease the book amount
+                    book.setBookAmount(book.getBookAmount() - 1);
+
+                    // Add the user to the book
+                    book.getUsers().add(user);
+
+                    // Save the changes
+                    bookRepository.save(book);
+
+                    logger.info(book.getTitle() + " is rented");
+                } catch (Exception e) {
+                    logger.error("Error renting the book with ID " + bookId, e);
+                    // Handle the exception (e.g., show an error message to the user)
+                    return "redirect:/library?error=rental_failed";
+                }
+            } else {
+                logger.warn("No more available copies of " + book.getTitle() + " in the library");
+                // Handle the case where the book is not available
+                return "redirect:/library?error=no_available_copies";
+            }
+        } else {
+            logger.error("Book with ID " + bookId + " not found");
+            // Handle the case where the book is not found
+            return "redirect:/library?error=book_not_found";
         }
-        return "redirect:/library"; // Redirect to the library
+
+        return "redirect:/library";
     }
 
     @PostMapping("/returnBook")
-    public String returnBook(@RequestParam("bookId") Long bookId) { //get bookId via html
-        User admin = userRepository.findByUsername("Admin"); // to find the admin
-        Optional<Book> optionalBook = bookRepository.findById(bookId); // find the book by id
+    public String returnBook(@RequestParam("bookId") Long bookId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userRepository.findByUsername(authentication.getName());
+
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            book.setRented(false);
-            book.setUser(admin);
+
+            // Távolítsuk el az aktuális felhasználót a könyvhöz tartozó user_book táblából
+          bookRepository.removeUserFromBook(currentUser.getUserId(), bookId);
+
+            // Növeljük a könyv mennyiségét
+            book.setBookAmount(book.getBookAmount() + 1);
+
             bookRepository.save(book);
-            logger.info(book.getTitle() + " is rented");
+            logger.info(book.getTitle() + " is returned by " + currentUser.getUsername());
         }
-        return "redirect:/UserLibrary"; // Redirect to the library
+
+        return "redirect:/UserLibrary";
     }
 
 

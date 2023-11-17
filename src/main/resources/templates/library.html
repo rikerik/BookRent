@@ -39,7 +39,7 @@
 
 
 <div class="flex flex-row flex-wrap">
-    <div class="p-6 w-auto" th:each="book : ${books}" th:if="${not book.isRented}">
+    <div class="p-6 w-auto" th:each="book : ${books}" th:if="${book.bookAmount >= 1}">
         <div class="card ml-10 mt-5 p-6 h-full relative group">
             <div class="flip-card">
                 <!-- Front of the card -->
