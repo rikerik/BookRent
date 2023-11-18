@@ -49,39 +49,33 @@ public class BookController {
                                @RequestParam("title") String title,
                                @RequestParam("genre") String genre,
                                @RequestParam("labels") String labels,
-                               @RequestParam("description") MultipartFile descriptionFile,
+                               @RequestParam("amount") Long amount,
+                               @RequestParam("description") MultipartFile descriptionFile, //Multipart file to work with uploaded txt and image
                                @RequestParam("image") MultipartFile imageFile,
                                RedirectAttributes redirectAttributes) {
         if (bookRepository.findBookByTitle(title) != null) {
             redirectAttributes.addAttribute("error", "exists");
         } else {
-            User admin = userRepository.findByUsername("Admin");
+            User admin = userRepository.findByUsername("Admin"); // to find the admin
             try {
-                String descriptionText = new String(descriptionFile.getBytes(), StandardCharsets.UTF_8);
+                String descriptionText = new String(descriptionFile.getBytes(), StandardCharsets.UTF_8); //Construct a String from the bytes of the uploaded txt
 
-                resetSequence();
+                resetSequence(); // Reset the sequence before adding a new book
 
-                Book newBook = Book.builder()
+                bookRepository.save(Book.builder() // save the book
                         .authorName(authorName)
                         .title(title)
                         .genre(genre)
                         .labels(labels)
+                        .bookAmount(amount)
                         .description(descriptionText)
                         .imageByte(imageFile.getBytes())
-                        .build();
-
-                // Add the book to the admin's books
-                admin.addBook(newBook); // Assuming you have a method addBook in your User entity
-
-                // Save the book and the admin
-                bookRepository.save(newBook);
-                userRepository.save(admin);
-
+                        .users(Collections.singleton(admin))
+                        .build());
             } catch (Exception e) {
                 e.printStackTrace();
-                logger.info("Error while registering book");
             }
-            logger.info("Book is successfully registered!");
+
         }
         return "BookAddingPage";
     }
