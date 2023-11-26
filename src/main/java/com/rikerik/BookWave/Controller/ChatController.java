@@ -1,11 +1,8 @@
 package com.rikerik.BookWave.Controller;
 
-import com.rikerik.BookWave.DAO.UserRepository;
 import com.rikerik.BookWave.Model.ChatMessage;
-import com.rikerik.BookWave.Model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -19,31 +16,60 @@ public class ChatController {
 
 
 
-    @MessageMapping("/chat.register")
-    @SendTo("/topic/public")
-    public ChatMessage register(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+    @MessageMapping("/scifi/register")
+    @SendTo("/topic/scifi")
+    public ChatMessage registerForScifi(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
         return chatMessage;
     }
 
-    @MessageMapping("/chat.send")
-    @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+    @MessageMapping("/scifi/send")
+    @SendTo("/topic/scifi")
+    public ChatMessage sendScifiMessage(@Payload ChatMessage chatMessage) {
         return chatMessage;
     }
 
-    @MessageMapping("/chat.leave")
-    @SendTo("/topic/public")
-    public ChatMessage leaveChat(@Payload ChatMessage chatMessage) {
+    @MessageMapping("/scifi/leave")
+    @SendTo("/topic/scifi")
+    public ChatMessage leaveScifiChat(@Payload ChatMessage chatMessage) {
         return chatMessage;
     }
-    @GetMapping("/chat") //to show the login form with get
-    public String index(Model model) {
+
+    @MessageMapping("/fantasy/register")
+    @SendTo("/topic/fantasy")
+    public ChatMessage registerForFantasy(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+        return chatMessage;
+    }
+
+    @MessageMapping("/fantasy/send")
+    @SendTo("/topic/fantasy")
+    public ChatMessage sendFantasyMessage(@Payload ChatMessage chatMessage) {
+        return chatMessage;
+    }
+
+    @MessageMapping("/fantasy/leave")
+    @SendTo("/topic/fantasy")
+    public ChatMessage leaveFantasyChat(@Payload ChatMessage chatMessage) {
+        return chatMessage;
+    }
+
+    @GetMapping("/chatScifi")
+    public String scifiIndex(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         model.addAttribute("username", username);
-        return "chat";
+        model.addAttribute("topic", "scifi");
+        return "chatScifi";
+    }
 
+    @GetMapping("/chatFantasy")
+    public String fantasyIndex(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        model.addAttribute("username", username);
+        model.addAttribute("topic", "fantasy");
+        return "chatFantasy";
     }
 
 }

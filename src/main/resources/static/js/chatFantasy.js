@@ -33,10 +33,10 @@ function connect(event) {
 
 function onConnected() {
     // Subscribe to the Public Topic
-    stompClient.subscribe('/topic/public', onMessageReceived);
+    stompClient.subscribe('/topic/fantasy', onMessageReceived);
 
     // Tell your username to the server
-    stompClient.send("/app/chat.register",
+    stompClient.send("/app/fantasy/register",
         {},
         JSON.stringify({sender: username.innerText, type: 'JOIN'})
     );
@@ -62,7 +62,7 @@ function send(event) {
             type: 'CHAT'
         };
 
-        stompClient.send("/app/chat.send", {}, JSON.stringify(chatMessage));
+        stompClient.send("/app/fantasy/send", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
     event.preventDefault();
@@ -115,7 +115,7 @@ function leaveChat() {
             type: 'LEAVE'
         };
 
-        stompClient.send("/app/chat.leave", {}, JSON.stringify(leaveMessage));
+        stompClient.send("/app/fantasy/leave", {}, JSON.stringify(leaveMessage));
         stompClient.disconnect(); // Disconnect the user
 
         // Redirect to the index page after leaving

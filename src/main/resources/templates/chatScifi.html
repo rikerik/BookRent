@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Chat</title>
-    <link href="/css/chat.css" rel="stylesheet" type="text/css">
+    <title>Sci-Fi Chat</title>
+    <link href="/css/chatScifi.css" rel="stylesheet" type="text/css">
 </head>
 <body style="background-position: center; background-repeat: no-repeat; background-size: cover;">
 
@@ -13,12 +13,10 @@
 
 <div id="username" class="hidden" th:text="${username}"></div>
 
-
-
 <div id="chat-page">
     <div class="chat-container">
         <div class="chat-header">
-            <h2>Chat</h2>
+            <h2>Sci-Fi Chat</h2>
         </div>
         <div class="connecting">Connecting to the chat...</div>
         <ul id="messageArea">
@@ -27,11 +25,11 @@
         <form id="messageForm" name="messageForm" nameForm="messageForm">
             <div class="form-group">
                 <div class="input-group clearfix">
-                    <input type="text" id="message" placeholder="Type a message..."
+                    <input type="text" id="message" placeholder="Send a transmission..."
                            autocomplete="off" class="form-control" />
                     <div class="button-group">
-                        <button type="submit" class="primary">Send</button>
-                        <button id="leaveButton" class="primary">Leave</button>
+                        <button type="submit" class="primary">Send Message</button>
+                        <button id="leaveButton" class="primary">Leave Spaceship</button>
                     </div>
 
                 </div>
@@ -42,6 +40,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<script type="text/javascript" src="/js/chat.js"></script>
+<script type="text/javascript" src="/js/chatScifi.js"></script>
 </body>
 </html>
