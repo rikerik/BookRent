@@ -24,10 +24,9 @@
             <a class="navbar-item" th:href="@{/library}">Library</a>
             <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
             <a class="navbar-item navbar-active" th:href="@{/bookSearch}">Search books</a>
-
+            <a class="navbar-item" th:href="@{/chat}">chat</a>
+            <a class="navbar-item" th:href="@{/}">Home</a>
         </div>
-        <a class="navbar-item" th:href="@{/}">Home</a>
-
     </div>
     <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
@@ -64,7 +63,7 @@
 
 
 <div class="flex flex-row flex-wrap">
-    <div class="p-6 w-auto" th:each="book : ${books}" th:if="${not book.isRented}">
+    <div class="p-6 w-auto" th:each="book : ${books}" th:if="${book.bookAmount >= 1}">
         <div class="card ml-10 mt-5 p-6 h-full relative group">
             <div class="flip-card">
                 <!-- Front of the card -->

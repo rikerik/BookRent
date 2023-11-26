@@ -18,8 +18,10 @@
         <div sec:authorize="hasRole('ROLE_USER')">
             <a class="navbar-item" th:href="@{/library}">Library</a>
             <a class="navbar-item navbar-active" th:href="@{/UserLibrary}">User Library</a>
+            <a class="navbar-item" th:href="@{/bookSearch}">Search books</a>
+            <a class="navbar-item" th:href="@{/chat}">chat</a>
+            <a class="navbar-item" th:href="@{/}">Home</a>
         </div>
-        <a class="navbar-item" th:href="@{/}">Home</a>
     </div>
     <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
