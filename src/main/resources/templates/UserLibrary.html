@@ -19,7 +19,7 @@
             <a class="navbar-item" th:href="@{/library}">Library</a>
             <a class="navbar-item navbar-active" th:href="@{/UserLibrary}">User Library</a>
             <a class="navbar-item" th:href="@{/bookSearch}">Search books</a>
-            <a class="navbar-item" th:href="@{/chat}">chat</a>
+            <a class="navbar-item" th:href="@{/chatFantasy}" th:if="${hasEnoughFantasyBooks}">fantasy chat</a>
             <a class="navbar-item" th:href="@{/}">Home</a>
         </div>
     </div>

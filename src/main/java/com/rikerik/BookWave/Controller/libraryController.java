@@ -4,8 +4,10 @@ import com.rikerik.BookWave.DAO.BookRepository;
 import com.rikerik.BookWave.DAO.UserRepository;
 import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Model.User;
+import com.rikerik.BookWave.Service.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +26,10 @@ import java.util.stream.Collectors;
 @SpringBootApplication
 @Controller
 public class libraryController {
-    private static final Logger logger = LoggerFactory.getLogger(com.rikerik.BookWave.Controller.Controller.class);
+
+    @Autowired
+    private CustomUserDetailsService userService;
+    private static final Logger logger = LoggerFactory.getLogger(libraryController.class);
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
@@ -47,6 +52,8 @@ public class libraryController {
             }
             logger.info("All books are listed!");
             model.addAttribute("books", books);
+
+
         }
         return "library";
     }
@@ -70,6 +77,10 @@ public class libraryController {
 
 
             model.addAttribute("books", userBooks);
+            // Check if the user has at least 5 fantasy books
+            boolean hasEnoughFantasyBooks = userService.hasEnoughFantasyBooks(userBooks);
+            model.addAttribute("hasEnoughFantasyBooks", hasEnoughFantasyBooks);
+
         }
         return "UserLibrary";
     }
@@ -137,6 +148,9 @@ public class libraryController {
 
         return "redirect:/UserLibrary";
     }
+
+    // Method to check if the user has at least 5 fantasy books
+
 
 
 }

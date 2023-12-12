@@ -26,7 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @SpringBootApplication
 @Controller
 public class UserAuthController {
-    private static final Logger logger = LoggerFactory.getLogger(com.rikerik.BookWave.Controller.Controller.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserAuthController.class);
     private final UserRepository userRepository;
 
     @Autowired
@@ -121,9 +121,4 @@ public class UserAuthController {
     public String loginFailure() {
         return "loginFailure";
     }
-
-    //TODO
-    //finish chat
-    //make it responsive
-    //number of books which is rentable
 }

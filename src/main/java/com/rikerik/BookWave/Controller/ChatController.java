@@ -1,6 +1,11 @@
 package com.rikerik.BookWave.Controller;
 
+import com.rikerik.BookWave.DAO.UserRepository;
+import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Model.ChatMessage;
+import com.rikerik.BookWave.Model.User;
+import com.rikerik.BookWave.Service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,9 +16,20 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 @Controller
 public class ChatController {
 
+    private final UserRepository userRepository;
+
+
+    @Autowired
+    private CustomUserDetailsService userService;
+
+    public ChatController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     @MessageMapping("/scifi/register")
@@ -66,10 +82,21 @@ public class ChatController {
     @GetMapping("/chatFantasy")
     public String fantasyIndex(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(auth.getName());
+
+        List<Book> userBooks = userService.getUserBooks(user);
+
+        if (!userService.hasEnoughFantasyBooks(userBooks)) {
+            // Redirect or handle the case where the user doesn't have enough fantasy books
+            return "redirect:/library";
+        }
+
         String username = auth.getName();
         model.addAttribute("username", username);
         model.addAttribute("topic", "fantasy");
+
         return "chatFantasy";
     }
-
 }
+
+

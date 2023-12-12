@@ -42,7 +42,7 @@
 <div class="p-14 w-auto m-auto">
     <form th:action="@{/bookSearch}" method="get">
         <div class="dropdown dropdown-hover">
-            <label class="btn btn-solid-primary my-2" tabindex="0">Click</label>
+            <label class="btn btn-solid-primary my-2" tabindex="0" th:text="${selectedAttribute == 'author' ? 'Author' : (selectedAttribute == 'title' ? 'Title' : 'Genre')}">Search</label>
             <div class="dropdown-menu dropdown-menu-right">
                 <a class="dropdown-item text-sm" th:href="@{/bookSearch(attribute='author')}"
                    th:classappend="${selectedAttribute == 'author' ? 'dropdown-active' : ''}" tabindex="-1">Author</a>
@@ -58,6 +58,7 @@
         <button class="btn btn-outline-primary" type="submit">Search</button>
     </form>
 </div>
+
 
 
 

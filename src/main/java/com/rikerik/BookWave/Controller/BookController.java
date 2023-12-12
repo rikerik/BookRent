@@ -22,7 +22,8 @@ import java.util.*;
 @SpringBootApplication
 @Controller
 public class BookController {
-    private static final Logger logger = LoggerFactory.getLogger(com.rikerik.BookWave.Controller.Controller.class);
+    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
+
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
@@ -159,7 +160,10 @@ public class BookController {
 
 
 
-
+//TODO
+    //mettől meddig
+    //admin felület
+    //cimkék alapján alapján
 
 
 
