@@ -164,7 +164,7 @@ public class BookController {
     //mettől meddig
     //admin felület
     //cimkék alapján alapján
-
+//kibérelt könyv esetén keresésnél nem jelez semmit csak egy üres oldalt jelenít meg
 
 
 }

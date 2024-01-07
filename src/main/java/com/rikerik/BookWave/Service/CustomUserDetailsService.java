@@ -54,4 +54,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         // Check if the user has at least 5 fantasy books
         return !fantasyBooks.isEmpty();
     }
+
+    public boolean hasEnoughScifiBooks(List<Book> userBooks) {
+        // Filter scifi books
+        List<Book> scifiBooks = userBooks.stream()
+                .filter(book -> book.getGenre().contains("Scifi"))
+                .toList();
+
+        // Check if the user has at least 5 fantasy books
+        return !scifiBooks.isEmpty();
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.List;
 
 //Data access object for books
@@ -38,7 +39,4 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Modifying
     @Query(value = "DELETE FROM book_user WHERE user_id = :userId AND book_id = :bookId", nativeQuery = true)
     void removeUserFromBook(@Param("userId") long userId, @Param("bookId") long bookId);
-
-
-
 }

@@ -1,11 +1,14 @@
 package com.rikerik.BookWave.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Entity
 @Table(name = "Users")
@@ -39,12 +42,13 @@ public class User {
     @Column(name = "role", nullable = true)
     private Roles Role;
 
+    @JsonIgnore // Exclude books from hashCode and equals
     @ManyToMany(mappedBy = "users")
     private Set<Book> books = new HashSet<>();
 
-    public void addBook(Book book) {
-        this.books.add(book);
-        book.getUsers().add(this);
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, email, Role);
     }
 
 }

@@ -49,10 +49,20 @@
             <a class="navbar-item" th:href="@{/library}">Library</a>
             <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
             <a class="navbar-item" th:href="@{/bookSearch}">Search books</a>
-            <a class="navbar-item" th:href="@{/chatFantasy}">fantasy chat</a>
-            <a class="navbar-item" th:href="@{/chatScifi}"> scifi chat</a>
+
+                <div class=" dropdown show">
+                    <a class="navbar-item dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Chats
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{/chatScifi}"> scifi chat</a>
+                        <a class="dropdown-item" th:href="@{/chatFantasy}">fantasy chat</a>
+                    </div>
+                </div>
 
             <a class="navbar-item navbar-active" th:href="@{/}">Home</a>
+
+
 
         </div>
         <div sec:authorize="hasRole('ROLE_ADMIN')">

@@ -73,6 +73,16 @@ public class ChatController {
     @GetMapping("/chatScifi")
     public String scifiIndex(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(auth.getName());
+
+
+        List<Book> userBooks = userService.getUserBooks(user);
+
+        if (!userService.hasEnoughScifiBooks(userBooks)) {
+            // Redirect or handle the case where the user doesn't have enough fantasy books
+            return "redirect:/library";
+        }
+
         String username = auth.getName();
         model.addAttribute("username", username);
         model.addAttribute("topic", "scifi");

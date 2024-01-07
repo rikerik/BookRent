@@ -3,10 +3,6 @@ package com.rikerik.BookWave.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 
@@ -46,7 +42,7 @@ public class InitializeData {
 
         resourceDatabasePopulator.setContinueOnError(true);
         resourceDatabasePopulator.execute(dataSource);
-        /*
+
          */
     }
 }

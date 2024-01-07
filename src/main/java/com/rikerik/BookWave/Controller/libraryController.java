@@ -1,8 +1,10 @@
 package com.rikerik.BookWave.Controller;
 
 import com.rikerik.BookWave.DAO.BookRepository;
+import com.rikerik.BookWave.DAO.BookUserRepository;
 import com.rikerik.BookWave.DAO.UserRepository;
 import com.rikerik.BookWave.Model.Book;
+import com.rikerik.BookWave.Model.BookUser;
 import com.rikerik.BookWave.Model.User;
 import com.rikerik.BookWave.Service.CustomUserDetailsService;
 import org.slf4j.Logger;
@@ -17,10 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 //Controller for book operations
 @SpringBootApplication
@@ -33,10 +36,13 @@ public class libraryController {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final BookUserRepository bookUserRepository;
 
-    public libraryController(BookRepository bookRepository, UserRepository userRepository) {
+    @Autowired
+    public libraryController(BookRepository bookRepository, UserRepository userRepository, BookUserRepository bookUserRepository) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+        this.bookUserRepository = bookUserRepository;
     }
 
     //lists all books in the library
@@ -100,6 +106,14 @@ public class libraryController {
                     // Decrease the book amount
                     book.setBookAmount(book.getBookAmount() - 1);
 
+                    // Create a BookUser entity and set the user, book, and due date
+                    BookUser bookUser = new BookUser();
+                    bookUser.setUser(user);
+                    bookUser.setBook(book);
+                    bookUser.setDueDateTime(LocalDateTime.now().plusSeconds(30)); //set this to an actual date
+
+                    bookUserRepository.save(bookUser);
+
                     // Add the user to the book
                     book.getUsers().add(user);
 
@@ -148,9 +162,6 @@ public class libraryController {
 
         return "redirect:/UserLibrary";
     }
-
-    // Method to check if the user has at least 5 fantasy books
-
 
 
 }
