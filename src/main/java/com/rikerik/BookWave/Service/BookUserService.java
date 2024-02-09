@@ -21,7 +21,7 @@ public class BookUserService {
     @Autowired
     private BookRepository bookRepository;
 
-    @Scheduled(fixedDelay = 1000) // Run every 1000 milliseconds (1 second) TODO dont check it every 1 second
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000) // Run every 1000 milliseconds (1 second) TODO dont check it every 1 second
         public void checkAndRemoveOverdueBooks() {
         System.out.println("Executing scheduled task...");
         List<BookUser> overdueBookUsers = bookUserRepository.findOverdueBooks(LocalDateTime.now());

@@ -71,7 +71,19 @@
         </div>
     </div>
 </div>
+
+<!-- Display recommended books if available -->
+<div th:if="${recommendedBooks != null and not #lists.isEmpty(recommendedBooks)}">
+    <h3>Recommended Books:</h3>
+    <div th:each="recommendedBook : ${recommendedBooks}">
+        <!-- Display recommended book information -->
+        <p th:text="${recommendedBook.title}"></p>
+        <!-- Add more recommended book details as needed -->
+    </div>
+</div>
 <script type="text/javascript" th:src="@{/js/script.js}"></script>
+
+
 
 
 </body>

@@ -25,7 +25,6 @@ public class SecurityConfiguration {
 
     @Autowired
     private UserDetailsService userDetailsService;
-    CookieClearingLogoutHandler cookies = new CookieClearingLogoutHandler("our-custom-cookie");
 
     @Bean
 // Configures and returns an AuthenticationProvider
@@ -76,7 +75,7 @@ public class SecurityConfiguration {
                         .defaultSuccessUrl("/", true)
 
                 )
-                .logout((logout) -> logout.logoutSuccessUrl("/login").addLogoutHandler(cookies));
+                .logout((logout) -> logout.logoutSuccessUrl("/login"));
 
         return http.build();
     }

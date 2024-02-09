@@ -1,4 +1,5 @@
 package com.rikerik.BookWave.Model;
+//A chathez tartozó enumok és változók
 
 public class ChatMessage {
     private String content;

@@ -70,8 +70,8 @@ public class BookController {
                         .labels(labels)
                         .bookAmount(amount)
                         .description(descriptionText)
+                                .userId(admin.getUserId())
                         .imageByte(imageFile.getBytes())
-                        .users(Collections.singleton(admin))
                         .build());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -161,7 +161,6 @@ public class BookController {
 
 
 //TODO
-    //mettől meddig
     //admin felület
     //cimkék alapján alapján
 //kibérelt könyv esetén keresésnél nem jelez semmit csak egy üres oldalt jelenít meg

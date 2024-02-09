@@ -6,8 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-//This class is for the user who is currently logs in
+//A bejelentkezett felhasználó azonosítása
 public class CustomUserDetails implements UserDetails {
+
 
 
     private User user;

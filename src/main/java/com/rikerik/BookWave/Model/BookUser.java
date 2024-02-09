@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+// A reláció a felhasználó és könyv között, továbbá a könyv kölcsönzésének lejárati ideje
 @Entity
 @Table(name = "book_user")
 @Data

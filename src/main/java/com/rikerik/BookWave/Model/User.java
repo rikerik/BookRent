@@ -18,6 +18,7 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 @Builder
 public class User {
 
+    // Felhasználó azonosítója
     @Id
     @SequenceGenerator(name = "ID_SEQ",
             sequenceName = "ID_SEQ",
@@ -29,26 +30,26 @@ public class User {
     @Column(name = "id", nullable = false, columnDefinition = "serial")
     private long userId;
 
+    // Felhasználónév
     @Column(name = "username", nullable = false)
     private String username;
 
+    // Jelszó
     @Column(name = "password", nullable = false)
     private String password;
 
+    // Email cím
     @Column(name = "email", nullable = false)
     private String email;
 
+    // Felhasználó szerepe
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role", nullable = true)
     private Roles Role;
 
-    @JsonIgnore // Exclude books from hashCode and equals
+    // Könyvek halmaza, amelyekhez a felhasználó hozzárendelt
+    @JsonIgnore // Könyvek kizárása a hashCode és equals számításból
     @ManyToMany(mappedBy = "users")
     private Set<Book> books = new HashSet<>();
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, username, password, email, Role);
-    }
 
 }

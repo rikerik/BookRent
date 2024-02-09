@@ -21,9 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 //Controller for book operations
 @SpringBootApplication
@@ -78,15 +77,43 @@ public class libraryController {
             for (Book book : userBooks) {
                 String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
                 book.setImageBase64(imageBase64);
+
+                // Fetch and set the labels for the book
+                List<String> labels = Arrays.asList(book.getLabels().split(","));
+                System.out.println("Labels for Book " + book.getBookId() + ": " + labels);
             }
             logger.info("User's books are listed!");
 
+            // Calculate label frequencies for all books
+            Map<String, Long> labelFrequencies = userBooks.stream()
+                    .flatMap(book -> Arrays.stream(book.getLabels().split(",")))
+                    .collect(Collectors.groupingBy(String::toLowerCase, Collectors.counting()));
 
+            System.out.println("Label Frequencies: " + labelFrequencies);
+
+            // Sort the labels by frequency in descending order
+            List<Map.Entry<String, Long>> sortedLabels = labelFrequencies.entrySet().stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                    .collect(Collectors.toList());
+
+            // Select the top 3 labels
+            List<String> topLabels = sortedLabels.stream()
+                    .limit(3)
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+
+            System.out.println("Top Labels: " + topLabels);
+            // Find books that match the top labels
+            List<Book> recommendedBooks = findRecommendedBooks(topLabels, userBooks);
+
+            model.addAttribute("recommendedBooks",recommendedBooks);
             model.addAttribute("books", userBooks);
             // Check if the user has at least 5 fantasy books
             boolean hasEnoughFantasyBooks = userService.hasEnoughFantasyBooks(userBooks);
             model.addAttribute("hasEnoughFantasyBooks", hasEnoughFantasyBooks);
+            model.addAttribute("topLabels", topLabels);
 
+            logger.info(recommendedBooks.toString());
         }
         return "UserLibrary";
     }
@@ -110,7 +137,7 @@ public class libraryController {
                     BookUser bookUser = new BookUser();
                     bookUser.setUser(user);
                     bookUser.setBook(book);
-                    bookUser.setDueDateTime(LocalDateTime.now().plusSeconds(30)); //set this to an actual date
+                    bookUser.setDueDateTime(LocalDateTime.now().plusDays(1)); //set this to an actual date
 
                     bookUserRepository.save(bookUser);
 
@@ -122,19 +149,9 @@ public class libraryController {
 
                     logger.info(book.getTitle() + " is rented");
                 } catch (Exception e) {
-                    logger.error("Error renting the book with ID " + bookId, e);
-                    // Handle the exception (e.g., show an error message to the user)
-                    return "redirect:/library?error=rental_failed";
+                  logger.warn(e.getMessage());
                 }
-            } else {
-                logger.warn("No more available copies of " + book.getTitle() + " in the library");
-                // Handle the case where the book is not available
-                return "redirect:/library?error=no_available_copies";
             }
-        } else {
-            logger.error("Book with ID " + bookId + " not found");
-            // Handle the case where the book is not found
-            return "redirect:/library?error=book_not_found";
         }
 
         return "redirect:/library";
@@ -161,6 +178,39 @@ public class libraryController {
         }
 
         return "redirect:/UserLibrary";
+    }
+
+    @GetMapping("/recommend")
+    public String recommendBooksForCurrentUser(Model model){
+        model.addAttribute("recommendBooks");
+        return "recommendBooks";
+    }
+
+    private List<Book> findRecommendedBooks(List<String> labels, List<Book> userBooks) {
+        // Find books that match all three labels
+        List<Book> recommendedBooks = userBooks.stream()
+                .filter(book -> bookContainsAllLabels(book, labels))
+                .collect(Collectors.toList());
+
+        // If there are no matches for all three labels, try finding books with two or one of the labels
+        if (recommendedBooks.isEmpty()) {
+            for (int i = labels.size(); i > 0; i--) {
+                List<String> subsetLabels = labels.subList(0, i);
+                recommendedBooks = userBooks.stream()
+                        .filter(book -> bookContainsAllLabels(book, subsetLabels))
+                        .collect(Collectors.toList());
+                if (!recommendedBooks.isEmpty()) {
+                    break;
+                }
+            }
+        }
+
+        return recommendedBooks;
+    }
+
+    private boolean bookContainsAllLabels(Book book, List<String> labels) {
+        List<String> bookLabels = Arrays.asList(book.getLabels().split(","));
+        return bookLabels.containsAll(labels);
     }
 
 
