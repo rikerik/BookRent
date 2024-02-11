@@ -1,13 +1,11 @@
 package com.rikerik.BookWave.Model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -74,6 +72,9 @@ public class Book implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> users = new HashSet<>();
+
+    public <T> Book(String s, List<T> ts) {
+    }
 
     @Override
     public boolean equals(Object o) {

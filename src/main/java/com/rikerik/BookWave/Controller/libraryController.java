@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @Controller
 public class libraryController {
 
+
     @Autowired
     private CustomUserDetailsService userService;
     private static final Logger logger = LoggerFactory.getLogger(libraryController.class);
@@ -36,6 +37,7 @@ public class libraryController {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final BookUserRepository bookUserRepository;
+
 
     @Autowired
     public libraryController(BookRepository bookRepository, UserRepository userRepository, BookUserRepository bookUserRepository) {
@@ -69,6 +71,7 @@ public class libraryController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); //obtaining the currently authenticated user
         User user = userRepository.findByUsername(authentication.getName());
 
+         List<Book> allBooks = bookRepository.findAll();
 
         List<Book> userBooks = bookRepository.findByUsers(user);
         if (userBooks.isEmpty()) {
@@ -102,18 +105,18 @@ public class libraryController {
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList());
 
-            System.out.println("Top Labels: " + topLabels);
+            logger.info("Top Labels: " + topLabels);
             // Find books that match the top labels
-            List<Book> recommendedBooks = findRecommendedBooks(topLabels, userBooks);
+            Book recommendedBook = findRecommendedBook(topLabels, allBooks, userBooks);
 
-            model.addAttribute("recommendedBooks",recommendedBooks);
+            model.addAttribute("recommendedBook",recommendedBook);
             model.addAttribute("books", userBooks);
             // Check if the user has at least 5 fantasy books
             boolean hasEnoughFantasyBooks = userService.hasEnoughFantasyBooks(userBooks);
             model.addAttribute("hasEnoughFantasyBooks", hasEnoughFantasyBooks);
             model.addAttribute("topLabels", topLabels);
 
-            logger.info(recommendedBooks.toString());
+            logger.info(recommendedBook.getTitle());
         }
         return "UserLibrary";
     }
@@ -186,32 +189,49 @@ public class libraryController {
         return "recommendBooks";
     }
 
-    private List<Book> findRecommendedBooks(List<String> labels, List<Book> userBooks) {
-        // Find books that match all three labels
-        List<Book> recommendedBooks = userBooks.stream()
-                .filter(book -> bookContainsAllLabels(book, labels))
-                .collect(Collectors.toList());
 
-        // If there are no matches for all three labels, try finding books with two or one of the labels
-        if (recommendedBooks.isEmpty()) {
+
+
+    private Book findRecommendedBook(List<String> labels, List<Book> allBooks, List<Book> userBooks) {
+        // Create a set of user book titles for faster lookup
+        Set<String> userBookTitles = userBooks.stream()
+                .map(Book::getTitle)
+                .collect(Collectors.toSet());
+
+        // Shuffle the list of all books
+        List<Book> shuffledBooks = new ArrayList<>(allBooks);
+        Collections.shuffle(shuffledBooks);
+
+        // Find books that are not in the user's library and match all labels
+        Optional<Book> recommendedBook = shuffledBooks.stream()
+                .filter(book -> !userBookTitles.contains(book.getTitle())) // Filter out user books
+                .filter(book -> bookContainsAllLabels(book, labels))
+                .findFirst();
+
+        if (!recommendedBook.isPresent()) {
             for (int i = labels.size(); i > 0; i--) {
                 List<String> subsetLabels = labels.subList(0, i);
-                recommendedBooks = userBooks.stream()
+                recommendedBook = shuffledBooks.stream()
+                        .filter(book -> !userBookTitles.contains(book.getTitle())) // Filter out user books
                         .filter(book -> bookContainsAllLabels(book, subsetLabels))
-                        .collect(Collectors.toList());
-                if (!recommendedBooks.isEmpty()) {
+                        .findFirst();
+                if (recommendedBook.isPresent()) {
                     break;
                 }
             }
         }
 
-        return recommendedBooks;
+        return recommendedBook.orElse(new Book("", Collections.emptyList()));
     }
+
 
     private boolean bookContainsAllLabels(Book book, List<String> labels) {
         List<String> bookLabels = Arrays.asList(book.getLabels().split(","));
         return bookLabels.containsAll(labels);
     }
 
+
+
+    
 
 }
