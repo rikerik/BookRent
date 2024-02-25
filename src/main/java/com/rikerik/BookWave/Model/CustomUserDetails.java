@@ -7,12 +7,18 @@ import java.util.Collection;
 import java.util.Collections;
 
 //A bejelentkezett felhasználó azonosítása
+/**
+ * CustomUserDetails class implements the UserDetails interface and represents the custom user details for authentication and authorization.
+ */
 public class CustomUserDetails implements UserDetails {
-
-
 
     private User user;
 
+    /**
+     * Constructs a new CustomUserDetails object with the specified User.
+     * 
+     * @param user the User object representing the user details.
+     */
     public CustomUserDetails(User user){
         super();
         this.user = user;

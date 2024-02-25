@@ -17,6 +17,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
+/**
+ * This class implements the UserDetailsService interface and provides custom
+ * functionality for loading user details and checking if a user has enough
+ * fantasy or scifi books.
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

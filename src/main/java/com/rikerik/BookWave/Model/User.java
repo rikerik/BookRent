@@ -5,11 +5,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
+/**
+ * Represents a user in the system.
+ */
 @Entity
 @Table(name = "Users")
 @Data

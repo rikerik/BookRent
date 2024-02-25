@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Represents a book in the BookWave application.
+ */
 @Entity
 @Table(name = "Books")
 @Data
@@ -74,6 +77,9 @@ public class Book implements Serializable {
     private Set<User> users = new HashSet<>();
 
     public <T> Book(String s, List<T> ts) {
+    }
+
+    public Book(String space) {
     }
 
     @Override

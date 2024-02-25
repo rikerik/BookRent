@@ -1,6 +1,9 @@
 function rentFunction() {
     alert("Book rented!");
 }
+function alreadyRented() {
+    alert("Book is already rented!");
+}
 function returnFunction() {
     alert("Book returned to the library!");
 }

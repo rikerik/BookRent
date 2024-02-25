@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * Represents the composite key for the BookUser entity.
+ * It consists of the book ID and the user ID.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

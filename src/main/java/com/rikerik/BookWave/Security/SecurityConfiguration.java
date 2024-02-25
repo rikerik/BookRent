@@ -15,10 +15,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 
+/**
+ * This class represents the configuration for security in the application.
+ * It provides methods to configure authentication and authorization settings.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {

@@ -1,50 +1,48 @@
 package com.rikerik.BookWave.Controller;
 
-import com.rikerik.BookWave.DAO.BookRepository;
-import com.rikerik.BookWave.DAO.UserRepository;
+
 import com.rikerik.BookWave.Model.Book;
-import com.rikerik.BookWave.Model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.rikerik.BookWave.Service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+/**
+ * This class is the controller for handling book-related operations.
+ */
 @SpringBootApplication
 @Controller
 public class BookController {
-    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
-
-    private final BookRepository bookRepository;
-    private final UserRepository userRepository;
+    private final BookService bookService;
 
     @Autowired
-    private JdbcOperations jdbcTemplate;
 
 
-    public BookController(BookRepository bookRepository, UserRepository userRepository) {
-        this.bookRepository = bookRepository;
-        this.userRepository = userRepository;
+    public BookController(BookService bookService) {
+
+        this.bookService = bookService;
     }
 
-    @Transactional //FOR TESTING REGISTER METHOD WITH PRE-FILLED DB
-    public void resetSequence() {
-        Long maxId = jdbcTemplate.queryForObject("SELECT MAX(book_id) FROM books", Long.class);
-        if (maxId != null) {
-            jdbcTemplate.execute("ALTER SEQUENCE BOOK_ID_SEQ RESTART WITH " + (maxId + 1)); //alter the sequence so it wont start with one
-        }
-    }
-
+    /**
+     * Registers a book with the given details.
+     *
+     * @param authorName         the name of the author
+     * @param title              the title of the book
+     * @param genre              the genre of the book
+     * @param labels             the labels associated with the book
+     * @param amount             the amount of books available
+     * @param descriptionFile    the file containing the book's description
+     * @param imageFile          the file containing the book's image
+     * @param redirectAttributes the redirect attributes for the response
+     * @return the view name for the book adding page
+     */
     @PostMapping("/registerBook")
     public String registerBook(@RequestParam("authorName") String authorName,
                                @RequestParam("title") String title,
@@ -54,116 +52,105 @@ public class BookController {
                                @RequestParam("description") MultipartFile descriptionFile, //Multipart file to work with uploaded txt and image
                                @RequestParam("image") MultipartFile imageFile,
                                RedirectAttributes redirectAttributes) {
-        if (bookRepository.findBookByTitle(title) != null) {
-            redirectAttributes.addAttribute("error", "exists");
-        } else {
-            User admin = userRepository.findByUsername("Admin"); // to find the admin
-            try {
-                String descriptionText = new String(descriptionFile.getBytes(), StandardCharsets.UTF_8); //Construct a String from the bytes of the uploaded txt
-
-                resetSequence(); // Reset the sequence before adding a new book
-
-                bookRepository.save(Book.builder() // save the book
-                        .authorName(authorName)
-                        .title(title)
-                        .genre(genre)
-                        .labels(labels)
-                        .bookAmount(amount)
-                        .description(descriptionText)
-                                .userId(admin.getUserId())
-                        .imageByte(imageFile.getBytes())
-                        .build());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
+        bookService.registerBook(authorName, title, genre, labels, amount, descriptionFile, imageFile, redirectAttributes);
         return "BookAddingPage";
     }
 
+    /**
+        * Retrieves a list of books and adds them to the model.
+        * 
+        * @param model the model to add the books to
+        * @return the view name for displaying all books
+        */
     @GetMapping("/listBooks")
-    public String Books(Model model) { // add the books to the model so the View will be able to use it
-        List<Book> books = bookRepository.findAll();
-        if (books.isEmpty()) {
-            logger.info("No books are found!");
-        } else {
-            for (Book book : books) {
-                String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
-                book.setImageBase64(imageBase64); //iterating through the books and converting the bytes to images
-            }
-            logger.info("All books are listed!");
-            model.addAttribute("books", books);
-        }
+    public String Books(Model model) {
+        // Fetch all books and add them to the model
+        List<Book> books = bookService.getAllBooks();
+        model.addAttribute("books", books);
         return "allBooks";
     }
+
+    /**
+     * Performs a book search based on the specified attribute and search value.
+     * 
+     * @param attribute the attribute to search for (default value is "genre")
+     * @param searchValue the value to search for (optional)
+     * @param model the model object to add the search results to
+     * @return the name of the view to render the search results
+     */
+    @GetMapping("/bookSearch")
+    public String bookSearch(@RequestParam(value = "attribute", defaultValue = "genre") String attribute,
+                             @RequestParam(value = "searchValue", required = false) String searchValue,
+                             Model model) {
+        // Call bookSearch method from BookService
+        Map<String, Object> searchResult = bookService.bookSearch(attribute, searchValue);
+
+        // Get the message and books list from the searchResult map
+        String message = (String) searchResult.get("message");
+        List<Book> books = (List<Book>) searchResult.get("books");
+
+        // Add message and books list to the model
+        model.addAttribute("message", message);
+        model.addAttribute("books", books);
+        model.addAttribute("selectedAttribute", attribute);
+        model.addAttribute("searchValue", searchValue);
+
+        return "bookSearch";
+    }
+
+    /**
+        * Returns the name of the view template for the book adding page.
+        *
+        * @return the name of the view template for the book adding page
+        */
     @GetMapping("/BookAddingPage")
     public String register() {
         return "BookAddingPage";
     }
 
+    /**
+        * Returns the name of the view template for displaying all books.
+        *
+        * @return the name of the view template
+        */
     @GetMapping("/allBooks")
     public String allBooks() {
         return "allBooks";
     }
 
-
-    //search for books, almost the same as list books
-
-    // Helper method to convert a Book to a list
-
-    @GetMapping("/bookSearch")
-    public String bookSearch(@RequestParam(value = "attribute", defaultValue = "genre") String attribute,
-                             @RequestParam(value = "searchValue", required = false) String searchValue,
-                             Model model) {
-        List<Book> books;
-
-        if (searchValue != null && !searchValue.isEmpty()) {
-            // Alakítsd az összes karaktert kisbetűvé a címeknél és íróknál
-            String searchValueLowerCase = searchValue.toLowerCase();
-
-            switch (attribute) {
-                case "author" -> {
-                    books = bookRepository.findByAuthorNameILike(searchValueLowerCase);
-                }
-                case "title" -> {
-                    books = bookRepository.findByTitleILike(searchValueLowerCase);
-                }
-                default -> {
-                    books = bookRepository.findByGenreILike(searchValueLowerCase);
-                }
-            };
-        } else {
-            books = bookRepository.findAll();
+    /**
+        * Removes a book by its ID.
+        *
+        * @param id    the ID of the book to be removed
+        * @param model the model object used for rendering the view
+        * @return the name of the view to be rendered after removing the book
+        */
+    @PostMapping("/bookRemove")
+    public String removeBookById(@RequestParam("id") Long id, Model model) {
+        try {
+            bookService.removeBookById(id);
+            model.addAttribute("message", "Book removed successfully with ID: " + id);
+        } catch (Exception e) {
+            model.addAttribute("message", "Error removing book: " + e.getMessage());
         }
+        return "bookRemove";
+    }
 
-        int numberOfBooks = books.size(); // Könyvek számának megszámolása
-
-        // Logolás a konzolon
-        System.out.println("Number of books found: " + numberOfBooks);
-
-        if (numberOfBooks == 0) {
-            model.addAttribute("message", "No books found for the specified " + attribute + ": " + searchValue);
-        } else {
-            for (Book book : books) {
-                String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
-                book.setImageBase64(imageBase64);
-            }
-        }
-
-        model.addAttribute("books", books);
-        model.addAttribute("selectedAttribute", attribute);
-        model.addAttribute("searchValue", searchValue);
-
-
-        return "bookSearch";
+    /**
+     * Retrieves the name of the view template for removing a book.
+     *
+     * @return the name of the view template for removing a book
+     */
+    @GetMapping("/bookRemove")
+    public String bookRemove() {
+        return "bookRemove";
     }
 
 
 
 //TODO
     //admin felület
-    //cimkék alapján alapján
-//kibérelt könyv esetén keresésnél nem jelez semmit csak egy üres oldalt jelenít meg
+    //kibérelt könyv esetén keresésnél nem jelez semmit csak egy üres oldalt jelenít meg
 
 
 }

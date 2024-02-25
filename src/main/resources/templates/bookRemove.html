@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Remove Book</title>
+</head>
+<body>
+<h1>Remove Book</h1>
+<form action="#" th:action="@{/bookRemove}" method="post">
+    <label for="title">Enter the title of the book to remove:</label><br>
+    <input type="text" id="title" name="title" required><br><br>
+    <button type="submit">Remove Book</button>
+</form>
+<!-- Display success or error messages -->
+<div th:if="${message}">
+    <p th:text="${message}" style="color: red;"></p>
+</div>
+</body>
+</html>

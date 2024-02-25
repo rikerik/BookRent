@@ -75,12 +75,14 @@
 
 <!-- Your other HTML content -->
 <div>
-    <h2>
-        <span th:if="${recommendedBook != null}" th:text="${recommendedBook.title}"></span>
-        <span th:if="${recommendedBook == null}"> </span>
-    </h2>
-
+    <h2>Recommended Books</h2>
+    <ul>
+        <li th:each="book : ${recommendedBooks}">
+            <span th:text="${book.title}"></span>
+        </li>
+    </ul>
 </div>
+
 <!-- Your other HTML content -->
 
 <script type="text/javascript" th:src="@{/js/script.js}"></script>
