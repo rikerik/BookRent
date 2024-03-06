@@ -17,9 +17,11 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
   db:
-    image: 'postgres:13.1-alpine'
+    image: postgres:13
     container_name: db
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
