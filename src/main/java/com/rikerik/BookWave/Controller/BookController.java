@@ -2,7 +2,10 @@ package com.rikerik.BookWave.Controller;
 
 
 import com.rikerik.BookWave.Model.Book;
+
 import com.rikerik.BookWave.Service.BookService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,7 @@ import java.util.*;
 @SpringBootApplication
 @Controller
 public class BookController {
+    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     private final BookService bookService;
 
@@ -53,7 +57,8 @@ public class BookController {
                                @RequestParam("image") MultipartFile imageFile,
                                RedirectAttributes redirectAttributes) {
         bookService.registerBook(authorName, title, genre, labels, amount, descriptionFile, imageFile, redirectAttributes);
-        return "BookAddingPage";
+        return "redirect:/BookAddingPage";
+
     }
 
     /**
@@ -104,7 +109,10 @@ public class BookController {
         * @return the name of the view template for the book adding page
         */
     @GetMapping("/BookAddingPage")
-    public String register() {
+    public String register(Model model) {
+        List<Book> books = bookService.getAllBooks();
+        model.addAttribute("books",books);
+        logger.debug("Number of books: {}", books.size());
         return "BookAddingPage";
     }
 
@@ -118,22 +126,24 @@ public class BookController {
         return "allBooks";
     }
 
-    /**
-        * Removes a book by its ID.
-        *
-        * @param id    the ID of the book to be removed
-        * @param model the model object used for rendering the view
-        * @return the name of the view to be rendered after removing the book
-        */
-    @PostMapping("/bookRemove")
-    public String removeBookById(@RequestParam("id") Long id, Model model) {
-        try {
-            bookService.removeBookById(id);
-            model.addAttribute("message", "Book removed successfully with ID: " + id);
-        } catch (Exception e) {
-            model.addAttribute("message", "Error removing book: " + e.getMessage());
-        }
-        return "bookRemove";
+
+    @PostMapping("/bookRemover")
+    public String removeBook(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+
+            redirectAttributes.addFlashAttribute("message", "Cannot remove admin user with ID 2.");
+            if (bookService.existsBookById(id)) {
+                try {
+                    bookService.removeBookById(id);
+                    redirectAttributes.addFlashAttribute("message", "Book removed successfully with ID: " + id);
+                } catch (Exception e) {
+                    redirectAttributes.addFlashAttribute("message", "Error removing book: " + e.getMessage());
+                }
+            } else {
+                redirectAttributes.addFlashAttribute("message", "Book with ID " + id + " does not exist.");
+            }
+
+        // Redirect to getUsers to refresh the user list after removal
+        return "redirect:/BookAddingPage";
     }
 
     /**
@@ -141,10 +151,7 @@ public class BookController {
      *
      * @return the name of the view template for removing a book
      */
-    @GetMapping("/bookRemove")
-    public String bookRemove() {
-        return "bookRemove";
-    }
+
 
 
 

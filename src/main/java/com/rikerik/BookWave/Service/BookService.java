@@ -139,6 +139,8 @@ public class BookService {
             logger.info("Book with ID '" + bookId + "' not found.");
         }
     }
-
+    public Boolean existsBookById(Long id) {
+        return  bookRepository.existsById(id);
+    }
 }
 
