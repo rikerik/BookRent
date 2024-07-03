@@ -2,6 +2,9 @@ package com.rikerik.BookWave.Controller;
 
 import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Service.LibraryService;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,7 @@ import java.util.Map;
  */
 @SpringBootApplication
 @Controller
+@Slf4j
 public class libraryController {
 
     @Autowired
@@ -66,7 +70,13 @@ public class libraryController {
      */
     @PostMapping("/rentBook")
     public String rentBook(@RequestParam("bookId") Long bookId) {
+        // Log or process the bookId
+        log.info("Received bookId: " + bookId);
+
+        // Call service to handle renting logic
         libraryService.rentBook(bookId);
+
+        // Redirect or return a response
         return "redirect:/bookSearch";
     }
 

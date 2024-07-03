@@ -86,7 +86,6 @@
           placeholder="Enter a value"
         />
         <input type="hidden" id="attribute" name="attribute" />
-        <button class="btn btn-outline-primary" type="submit">Search</button>
       </form>
     </div>
 
@@ -176,31 +175,31 @@
                       </div>
                       <div class="card absolute top-0 left-0 w-full h-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out card-body text-center flex flex-col">
                         <p class="card-text mb-4 text-lg">${book.description}</p>
-                         <form th:action="@{/rentBook}" method="post" class="mt-auto">
-                <input type="hidden" name="bookId" th:value="${book.bookId}" />
-                <button
-                  onclick="rentFunction()"
-                  type="submit"
-                  class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Rent the Book
-                  <svg
-                    class="w-4 h-4 ml-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 14 10"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M1 5h12m0 0L9 1m4 4L9 9"
-                    />
-                  </svg>
-                </button>
-              </form>
+                        <form action="/rentBook" method="post" class="mt-auto">
+                          <input type="hidden" name="bookId" value="${book.bookId}" />
+                          <button
+                            onclick="rentFunction()"
+                            type="submit"
+                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          >
+                            Rent the Book
+                            <svg
+                              class="w-4 h-4 ml-2"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 14 10"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M1 5h12m0 0L9 1m4 4L9 9"
+                              />
+                            </svg>
+                          </button>
+                        </form>
                       </div>
                     </div>
                   </div>
@@ -209,28 +208,9 @@
           }
 
           $("#searchResultsContainer").html(booksHtml);
-
-          // Attach event handler to dynamically added rent forms
-          $(".rent-form").submit(function (event) {
-            event.preventDefault();
-            const form = $(this);
-            $.ajax({
-              url: form.attr("action"),
-              type: form.attr("method"),
-              data: form.serialize(),
-              success: function (data) {
-                alert("Book rented successfully!");
-                // Optionally, update the UI to reflect the rented book status
-              },
-              error: function (xhr, status, error) {
-                console.error("Error:", error);
-                alert("An error occurred while renting the book.");
-              },
-            });
-          });
         }
       });
     </script>
   </body>
 </html>
-<script type="text/javascript" th:src="@{/js/script.js}"></script>
+<script type="text/javascript" src="/js/script.js"></script>
