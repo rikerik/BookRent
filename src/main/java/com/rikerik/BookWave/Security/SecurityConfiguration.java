@@ -30,9 +30,9 @@ public class SecurityConfiguration {
     private UserDetailsService userDetailsService;
 
     @Bean
-// Configures and returns an AuthenticationProvider
-// that uses a DaoAuthenticationProvider with a UserDetailsService
-// and a BCryptPasswordEncoder for secure password hashing.
+    // Configures and returns an AuthenticationProvider
+    // that uses a DaoAuthenticationProvider with a UserDetailsService
+    // and a BCryptPasswordEncoder for secure password hashing.
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
@@ -52,7 +52,7 @@ public class SecurityConfiguration {
     public static class MyAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
         @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                            AuthenticationException exception) throws IOException, ServletException {
+                AuthenticationException exception) throws IOException, ServletException {
             String username = request.getParameter("username");
             String error = exception.getMessage();
             System.out.println("A failed login attempt with username: "
@@ -60,17 +60,17 @@ public class SecurityConfiguration {
         }
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/register", "/resources/**", "/js/**", "/css/**").permitAll()
                         .requestMatchers("/BookAddingPage").hasRole("ADMIN")
-                        .anyRequest().authenticated() //the register page is available even without authentication
+                        .anyRequest().authenticated() // the register page is available even without authentication
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login") //the only available page next to the register. If credentials are valid, authentication is finished
+                        .loginPage("/login") // the only available page next to the register. If credentials are valid,
+                                             // authentication is finished
                         .usernameParameter("username")
                         .failureHandler(new MyAuthenticationFailureHandler())
                         .failureUrl("/loginFailure")

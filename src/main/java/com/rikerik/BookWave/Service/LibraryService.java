@@ -13,10 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-
 import java.time.LocalDateTime;
 import java.util.*;
-
 
 import static com.rikerik.BookWave.Service.RecommendationService.calculateTopLabels;
 import static com.rikerik.BookWave.Service.RecommendationService.findRecommendedBooks;
@@ -31,7 +29,8 @@ public class LibraryService {
     private static final Logger logger = LoggerFactory.getLogger(LibraryService.class);
 
     @Autowired
-    public LibraryService(BookRepository bookRepository, UserRepository userRepository, BookUserRepository bookUserRepository, CustomUserDetailsService userService) {
+    public LibraryService(BookRepository bookRepository, UserRepository userRepository,
+            BookUserRepository bookUserRepository, CustomUserDetailsService userService) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
         this.bookUserRepository = bookUserRepository;
@@ -45,10 +44,9 @@ public class LibraryService {
         } else {
             for (Book book : books) {
                 String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
-                book.setImageBase64(imageBase64); //iterating through the books and converting the bytes to images
+                book.setImageBase64(imageBase64); // iterating through the books and converting the bytes to images
             }
             logger.info("All books are listed!");
-
 
         }
         return books;
@@ -77,7 +75,7 @@ public class LibraryService {
             logger.info("User's books are listed!");
 
             // Calculate label frequencies for all books
-           List<String> topLabels = calculateTopLabels(userBooks);
+            List<String> topLabels = calculateTopLabels(userBooks);
 
             logger.info("Top Labels: " + topLabels);
             // Find books that match the top labels
@@ -100,16 +98,26 @@ public class LibraryService {
 
     public void rentBook(Long bookId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(authentication.getName());
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+
+        logger.info("User '{}' is attempting to rent book with ID '{}'", username, bookId);
+
         Optional<Book> optionalBook = bookRepository.findById(bookId);
+
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
+            logger.info("Book '{}' found with amount '{}'", book.getTitle(), book.getBookAmount());
+
             if (book.getBookAmount() > 0) {
                 try {
                     // Check if the user already has the book in their library
                     boolean alreadyRented = book.getUsers().contains(user);
 
                     if (!alreadyRented) {
+                        logger.info("User '{}' does not have the book '{}'. Proceeding with rental.", username,
+                                book.getTitle());
+
                         // Decrease the book amount
                         book.setBookAmount(book.getBookAmount() - 1);
 
@@ -127,14 +135,19 @@ public class LibraryService {
                         // Save the changes
                         bookRepository.save(book);
 
-                        logger.info(book.getTitle() + " is rented");
+                        logger.info("Book '{}' successfully rented to user '{}'. Remaining amount: '{}'",
+                                book.getTitle(), username, book.getBookAmount());
                     } else {
-                        logger.info(book.getTitle() + " is already in the user's library");
+                        logger.info("User '{}' already has the book '{}' in their library.", username, book.getTitle());
                     }
                 } catch (Exception e) {
-                    logger.warn(e.getMessage());
+                    logger.error("Error occurred while renting book '{}': {}", book.getTitle(), e.getMessage(), e);
                 }
+            } else {
+                logger.info("Book '{}' is out of stock. Unable to rent.", book.getTitle());
             }
+        } else {
+            logger.warn("Book with ID '{}' not found. User '{}' attempted to rent it.", bookId, username);
         }
     }
 
@@ -156,6 +169,5 @@ public class LibraryService {
             logger.info(book.getTitle() + " is returned by " + currentUser.getUsername());
         }
     }
-
 
 }

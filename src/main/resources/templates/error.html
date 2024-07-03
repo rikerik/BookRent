@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Login Error</title>
-</head>
-<body>
-<h1>Login Error</h1>
-<p>Invalid username or password. Please try again.</p>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error</title>
+  </head>
+  <body>
+    <h1>An error occurred</h1>
+    <p th:text="${errorMessage}"></p>
+    <a href="/bookSearch">Back to Search</a>
+  </body>
 </html>

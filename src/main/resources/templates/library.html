@@ -1,85 +1,236 @@
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head>
+  <head>
     <style>
-        .image-height {
-            height: 32rem;
-        }
+      .image-height {
+        height: 32rem;
+      }
     </style>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
-    <link href="../static/css/tailwind.css" th:href="@{../static/css/tailwind.css}" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"
+    />
+    <link
+      href="../static/css/tailwind.css"
+      th:href="@{../static/css/tailwind.css}"
+      type="text/css"
+    />
     <title>The Library</title>
-</head>
-<body>
-<div class="navbar  ">
-    <div class="navbar-start">
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="navbar-start">
         <a class="navbar-item">BookWave</a>
-        <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
-    </div>
-    <div class="navbar-center">
+        <p class="badge badge-outline-success badge-lg">
+          Welcome&nbsp;<span sec:authentication="name"></span>!
+        </p>
+      </div>
+      <div class="navbar-center">
         <div sec:authorize="hasRole('ROLE_USER')">
-            <a class="navbar-item navbar-active" th:href="@{/library}">Library</a>
-            <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
-            <a class="navbar-item" th:href="@{/bookSearch}">Search books</a>
-            <a class="navbar-item " th:href="@{/}">Home</a>
+          <a class="navbar-item" th:href="@{/library}">Library</a>
+          <a class="navbar-item" th:href="@{/UserLibrary}">User Library</a>
+          <a class="navbar-item navbar-active" th:href="@{/bookSearch}"
+            >Search books</a
+          >
+          <a class="navbar-item" th:href="@{/}">Home</a>
         </div>
-    </div>
-    <div class="navbar-end">
+      </div>
+      <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
-            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle navbar-item">Sign out</a>
-            <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-                <input hidden type="submit" value="Sign Out"/>
-            </form>
+          <a
+            href="javascript: document.logoutForm.submit()"
+            class="dropdown-toggle navbar-item"
+            >Sign out</a
+          >
+          <form
+            name="logoutForm"
+            th:action="@{/logout}"
+            method="post"
+            th:hidden="true"
+          >
+            <input hidden type="submit" value="Sign Out" />
+          </form>
         </div>
+      </div>
     </div>
-</div>
 
+    <div class="p-14 w-auto m-auto">
+      <form id="searchForm">
+        <div class="dropdown dropdown-hover">
+          <label
+            class="btn btn-solid-primary my-2"
+            tabindex="0"
+            id="dropdownLabel"
+            >Search</label
+          >
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item text-sm" href="#" data-attribute="author"
+              >Author</a
+            >
+            <a class="dropdown-item text-sm" href="#" data-attribute="title"
+              >Title</a
+            >
+            <a class="dropdown-item text-sm" href="#" data-attribute="genre"
+              >Genre</a
+            >
+          </div>
+        </div>
+        <input
+          class="input input-solid"
+          type="text"
+          id="searchValue"
+          name="searchValue"
+          placeholder="Enter a value"
+        />
+        <input type="hidden" id="attribute" name="attribute" />
+        <button class="btn btn-outline-primary" type="submit">Search</button>
+      </form>
+    </div>
 
-<div class="flex flex-row flex-wrap">
-    <div class="p-6 w-auto" th:each="book : ${books}" th:if="${book.bookAmount >= 1}">
-        <div class="card ml-10 mt-5 p-6 h-full relative group">
-            <div class="flip-card">
-                <!-- Front of the card -->
-                <div class="transition-transform duration-500 ease-in-out">
-                    <img class="w-96 image-height object-cover mx-auto"
-                         th:src="'data:image/jpeg;charset=utf-8;base64,' + ${book.imageBase64}" alt="">
-                    <div class="card-body text-center">
-                        <h5 class="card-title text-2xl font-semibold mb-2" th:text="${book.title}">Title</h5>
-                        <p class="card-text text-base text-gray-600" th:text="${book.authorName}">Author</p>
-                    </div>
-                </div>
+    <div id="searchResultsContainer" class="flex flex-row flex-wrap">
+      <div th:include="fragments/searchResults :: searchResults"></div>
+    </div>
 
-                <!-- Back of the card -->
-                <div class="card absolute top-0 left-0 w-full h-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out card-body text-center flex flex-col">
-                    <!-- Only show the description on the back side -->
-                    <p class="card-text mb-4 text-lg" th:text="${book.description}"></p>
-                    <form th:action="@{/rentBook}" method="post" class="mt-auto">
-                        <input type="hidden" name="bookId" th:value="${book.bookId}">
-                        <button onclick="rentFunction()" type="submit"
-                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $(".dropdown-menu a").click(function (event) {
+          event.preventDefault();
+          const selectedAttribute = $(this).data("attribute");
+          $("#attribute").val(selectedAttribute);
+          $("#dropdownLabel").text($(this).text());
+        });
+
+        $("#searchForm").submit(function (event) {
+          event.preventDefault();
+          const searchValue = $("#searchValue").val();
+          const attribute = $("#attribute").val();
+
+          if (!attribute) {
+            alert("Please select an attribute to search by.");
+            return;
+          }
+
+          $.ajax({
+            url: "/searchResults",
+            type: "GET",
+            data: {
+              searchValue: searchValue,
+              attribute: attribute,
+            },
+            success: function (data) {
+              updateSearchResults(data);
+            },
+            error: function (xhr, status, error) {
+              console.error("Error:", error);
+              alert("An error occurred while processing your request.");
+            },
+          });
+        });
+
+        $("#searchValue").on("input", function () {
+          const searchValue = $(this).val();
+          const attribute = $("#attribute").val();
+
+          if (!attribute) {
+            return;
+          }
+
+          $.ajax({
+            url: "/searchResults",
+            type: "GET",
+            data: {
+              searchValue: searchValue,
+              attribute: attribute,
+            },
+            success: function (data) {
+              updateSearchResults(data);
+            },
+            error: function (xhr, status, error) {
+              console.error("Error:", error);
+            },
+          });
+        });
+
+        function updateSearchResults(data) {
+          let booksHtml = "";
+          const books = data.books;
+          const message = data.message;
+
+          if (books.length === 0) {
+            booksHtml = <p>${message}</p>;
+          } else {
+            books.forEach((book) => {
+              booksHtml += (
+                <div class="p-6 w-auto">
+                  <div class="card ml-10 mt-5 p-6 h-full relative group">
+                    <div class="flip-card">
+                      <div class="transition-transform duration-500 ease-in-out">
+                        <img
+                          class="w-96 image-height object-cover mx-auto"
+                          src="data:image/jpeg;charset=utf-8;base64,${book.imageBase64}"
+                          alt=""
+                        />
+                        <div class="card-body text-center">
+                          <h5 class="card-title text-2xl font-semibold mb-2">
+                            ${book.title}
+                          </h5>
+                          <p class="card-text text-base text-gray-600">
+                            ${book.authorName}
+                          </p>
+                        </div>
+                      </div>
+                      <div class="card absolute top-0 left-0 w-full h-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out card-body text-center flex flex-col">
+                        <p class="card-text mb-4 text-lg">
+                          ${book.description}
+                        </p>
+                        <form
+                          th:action="@{/rentBook}"
+                          method="post"
+                          class="mt-auto"
+                        >
+                          <input
+                            type="hidden"
+                            name="bookId"
+                            value="${book.bookId}"
+                          />
+                          <button
+                            onclick="rentFunction()"
+                            type="submit"
+                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          >
                             Rent the Book
-                            <svg class="w-4 h-4 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 14 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                            <svg
+                              class="w-4 h-4 ml-2"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 14 10"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M1 5h12m0 0L9 1m4 4L9 9"
+                              />
                             </svg>
-                        </button>
-                    </form>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              );
+            });
+          }
 
-
-            </div>
-        </div>
-    </div>
-</div>
-</body>
-
+          $("#searchResultsContainer").html(booksHtml);
+        }
+      });
+    </script>
+  </body>
 </html>
-
-
 <script type="text/javascript" th:src="@{/js/script.js}"></script>
-

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Search Results</title>
+  </head>
+  <body>
+    <div th:fragment="searchResults">
+      <div class="flex flex-row flex-wrap" id="bookResults">
+        <div
+          class="p-6 w-auto"
+          th:each="book : ${books}"
+          th:if="${book.bookAmount >= 1}"
+        >
+          <div class="card ml-10 mt-5 p-6 h-full relative group">
+            <div class="flip-card">
+              <div class="transition-transform duration-500 ease-in-out">
+                <img
+                  class="w-96 image-height object-cover mx-auto"
+                  th:src="'data:image/jpeg;charset=utf-8;base64,' + ${book.imageBase64}"
+                  alt=""
+                />
+                <div class="card-body text-center">
+                  <h5
+                    class="card-title text-2xl font-semibold mb-2"
+                    th:text="${book.title}"
+                  >
+                    Title
+                  </h5>
+                  <p
+                    class="card-text text-base text-gray-600"
+                    th:text="${book.authorName}"
+                  >
+                    Author
+                  </p>
+                </div>
+              </div>
+              <div
+                class="card absolute top-0 left-0 w-full h-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out card-body text-center flex flex-col"
+              >
+                <p
+                  class="card-text mb-4 text-lg"
+                  th:text="${book.description}"
+                ></p>
+                <form th:action="@{/rentBook}" method="post" class="mt-auto">
+                  <input
+                    type="hidden"
+                    name="bookId"
+                    th:value="${book.bookId}"
+                  />
+                  <button
+                    onclick="rentFunction()"
+                    type="submit"
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    Rent the Book
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 10"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M1 5h12m0 0L9 1m4 4L9 9"
+                      />
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        id="noBook"
+        th:if="${#lists.isEmpty(books)}"
+        th:text="${message}"
+      ></div>
+    </div>
+  </body>
+</html>
+<script type="text/javascript" th:src="@{/js/script.js}"></script>

@@ -1,6 +1,5 @@
 package com.rikerik.BookWave.Controller;
 
-
 import com.rikerik.BookWave.Model.Book;
 
 import com.rikerik.BookWave.Service.BookService;
@@ -8,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +25,6 @@ public class BookController {
     private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     private final BookService bookService;
-
-    @Autowired
-
 
     public BookController(BookService bookService) {
 
@@ -49,24 +46,26 @@ public class BookController {
      */
     @PostMapping("/registerBook")
     public String registerBook(@RequestParam("authorName") String authorName,
-                               @RequestParam("title") String title,
-                               @RequestParam("genre") String genre,
-                               @RequestParam("labels") String labels,
-                               @RequestParam("amount") Long amount,
-                               @RequestParam("description") MultipartFile descriptionFile, //Multipart file to work with uploaded txt and image
-                               @RequestParam("image") MultipartFile imageFile,
-                               RedirectAttributes redirectAttributes) {
-        bookService.registerBook(authorName, title, genre, labels, amount, descriptionFile, imageFile, redirectAttributes);
+            @RequestParam("title") String title,
+            @RequestParam("genre") String genre,
+            @RequestParam("labels") String labels,
+            @RequestParam("amount") Long amount,
+            @RequestParam("description") MultipartFile descriptionFile, // Multipart file to work with uploaded txt and
+                                                                        // image
+            @RequestParam("image") MultipartFile imageFile,
+            RedirectAttributes redirectAttributes) {
+        bookService.registerBook(authorName, title, genre, labels, amount, descriptionFile, imageFile,
+                redirectAttributes);
         return "redirect:/BookAddingPage";
 
     }
 
     /**
-        * Retrieves a list of books and adds them to the model.
-        * 
-        * @param model the model to add the books to
-        * @return the view name for displaying all books
-        */
+     * Retrieves a list of books and adds them to the model.
+     * 
+     * @param model the model to add the books to
+     * @return the view name for displaying all books
+     */
     @GetMapping("/listBooks")
     public String Books(Model model) {
         // Fetch all books and add them to the model
@@ -78,69 +77,72 @@ public class BookController {
     /**
      * Performs a book search based on the specified attribute and search value.
      * 
-     * @param attribute the attribute to search for (default value is "genre")
+     * @param attribute   the attribute to search for (default value is "genre")
      * @param searchValue the value to search for (optional)
-     * @param model the model object to add the search results to
+     * @param model       the model object to add the search results to
      * @return the name of the view to render the search results
      */
     @GetMapping("/bookSearch")
-    public String bookSearch(@RequestParam(value = "attribute", defaultValue = "genre") String attribute,
-                             @RequestParam(value = "searchValue", required = false) String searchValue,
-                             Model model) {
-        // Call bookSearch method from BookService
-        Map<String, Object> searchResult = bookService.bookSearch(attribute, searchValue);
+    public String searchBooks(
+            @RequestParam(required = false) String attribute,
+            @RequestParam(required = false) String searchValue,
+            Model model) {
+        if (attribute == null || searchValue == null || searchValue.isEmpty()) {
+            attribute = "title"; // Default attribute
+            searchValue = ""; // Empty search value to get all books
+        }
+        Map<String, Object> result = bookService.bookSearch(attribute, searchValue);
+        model.addAttribute("books", result.get("books"));
+        model.addAttribute("message", result.get("message"));
+        return "bookSearch"; // Main page with search form and initial books
+    }
 
-        // Get the message and books list from the searchResult map
-        String message = (String) searchResult.get("message");
-        List<Book> books = (List<Book>) searchResult.get("books");
-
-        // Add message and books list to the model
-        model.addAttribute("message", message);
-        model.addAttribute("books", books);
-        model.addAttribute("selectedAttribute", attribute);
-        model.addAttribute("searchValue", searchValue);
-
-        return "bookSearch";
+    @GetMapping("/searchResults")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> searchBooksFragment(
+            @RequestParam String attribute,
+            @RequestParam String searchValue) {
+        Map<String, Object> result = bookService.bookSearch(attribute, searchValue);
+        return ResponseEntity.ok(result); // Return JSON response
     }
 
     /**
-        * Returns the name of the view template for the book adding page.
-        *
-        * @return the name of the view template for the book adding page
-        */
+     * Returns the name of the view template for the book adding page.
+     *
+     * @return the name of the view template for the book adding page
+     */
     @GetMapping("/BookAddingPage")
     public String register(Model model) {
         List<Book> books = bookService.getAllBooks();
-        model.addAttribute("books",books);
+        model.addAttribute("books", books);
         logger.debug("Number of books: {}", books.size());
         return "BookAddingPage";
     }
 
     /**
-        * Returns the name of the view template for displaying all books.
-        *
-        * @return the name of the view template
-        */
+     * Returns the name of the view template for displaying all books.
+     *
+     * @return the name of the view template
+     */
     @GetMapping("/allBooks")
     public String allBooks() {
         return "allBooks";
     }
 
-
     @PostMapping("/bookRemover")
     public String removeBook(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
 
-            redirectAttributes.addFlashAttribute("message", "Cannot remove admin user with ID 2.");
-            if (bookService.existsBookById(id)) {
-                try {
-                    bookService.removeBookById(id);
-                    redirectAttributes.addFlashAttribute("message", "Book removed successfully with ID: " + id);
-                } catch (Exception e) {
-                    redirectAttributes.addFlashAttribute("message", "Error removing book: " + e.getMessage());
-                }
-            } else {
-                redirectAttributes.addFlashAttribute("message", "Book with ID " + id + " does not exist.");
+        redirectAttributes.addFlashAttribute("message", "Cannot remove admin user with ID 2.");
+        if (bookService.existsBookById(id)) {
+            try {
+                bookService.removeBookById(id);
+                redirectAttributes.addFlashAttribute("message", "Book removed successfully with ID: " + id);
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("message", "Error removing book: " + e.getMessage());
             }
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Book with ID " + id + " does not exist.");
+        }
 
         // Redirect to getUsers to refresh the user list after removal
         return "redirect:/BookAddingPage";
@@ -151,13 +153,5 @@ public class BookController {
      *
      * @return the name of the view template for removing a book
      */
-
-
-
-
-//TODO
-    //admin felület
-    //kibérelt könyv esetén keresésnél nem jelez semmit csak egy üres oldalt jelenít meg
-
 
 }

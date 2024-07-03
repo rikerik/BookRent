@@ -67,7 +67,7 @@ public class libraryController {
     @PostMapping("/rentBook")
     public String rentBook(@RequestParam("bookId") Long bookId) {
         libraryService.rentBook(bookId);
-        return "redirect:/library";
+        return "redirect:/bookSearch";
     }
 
     /**

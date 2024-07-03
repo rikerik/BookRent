@@ -41,13 +41,17 @@ public class BookService {
     }
 
     public void registerBook(String authorName, String title, String genre, String labels, Long amount,
-                             MultipartFile descriptionFile, MultipartFile imageFile, RedirectAttributes redirectAttributes) {
+            MultipartFile descriptionFile, MultipartFile imageFile, RedirectAttributes redirectAttributes) {
         if (bookRepository.findBookByTitle(title) != null) {
             redirectAttributes.addAttribute("error", "exists");
         } else {
             User admin = userRepository.findByUsername("Admin"); // to find the admin
             try {
-                String descriptionText = new String(descriptionFile.getBytes(), StandardCharsets.UTF_8); //Construct a String from the bytes of the uploaded txt
+                String descriptionText = new String(descriptionFile.getBytes(), StandardCharsets.UTF_8); // Construct a
+                                                                                                         // String from
+                                                                                                         // the bytes of
+                                                                                                         // the uploaded
+                                                                                                         // txt
 
                 resetSequence(); // Reset the sequence before adding a new book
 
@@ -69,18 +73,18 @@ public class BookService {
     }
 
     public List<Book> getAllBooks() {
- // add the books to the model so the View will be able to use it
-            List<Book> books = bookRepository.findAll();
-            if (books.isEmpty()) {
-                logger.info("No books are found!");
-            } else {
-                for (Book book : books) {
-                    String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
-                    book.setImageBase64(imageBase64); //iterating through the books and converting the bytes to images
-                }
-                logger.info("All books are listed!");
+        // add the books to the model so the View will be able to use it
+        List<Book> books = bookRepository.findAll();
+        if (books.isEmpty()) {
+            logger.info("No books are found!");
+        } else {
+            for (Book book : books) {
+                String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
+                book.setImageBase64(imageBase64); // iterating through the books and converting the bytes to images
             }
-            return books;
+            logger.info("All books are listed!");
+        }
+        return books;
     }
 
     public Map<String, Object> bookSearch(String attribute, String searchValue) {
@@ -109,7 +113,7 @@ public class BookService {
         int numberOfBooks = books.size(); // Count the number of books
 
         // Log the number of books found
-        logger.info("Number of books found: " + numberOfBooks);
+        System.out.println("Number of books found: " + numberOfBooks);
 
         if (numberOfBooks == 0) {
             message = "No books found for the specified " + attribute + ": " + searchValue;
@@ -127,6 +131,7 @@ public class BookService {
         resultMap.put("books", books);
         return resultMap;
     }
+
     public void removeBookById(Long bookId) {
         // Find the book by ID
         Optional<Book> optionalBook = bookRepository.findById(bookId);
@@ -139,8 +144,8 @@ public class BookService {
             logger.info("Book with ID '" + bookId + "' not found.");
         }
     }
+
     public Boolean existsBookById(Long id) {
-        return  bookRepository.existsById(id);
+        return bookRepository.existsById(id);
     }
 }
-
