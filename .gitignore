@@ -34,5 +34,5 @@ build/
 
 
 
-.myenv
-.node_modules
+python/.myenv
+node_modules
