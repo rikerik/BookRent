@@ -6,16 +6,12 @@ import com.rikerik.BookWave.DAO.UserRepository;
 import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Model.CustomUserDetails;
 import com.rikerik.BookWave.Model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.
-        UserDetailsService;
-import org.springframework.security.core.userdetails.
-        UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 /**
  * This class implements the UserDetailsService interface and provides custom
@@ -26,12 +22,11 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private UserRepository userRepo;
-    @Autowired
     private BookRepository bookRepository;
 
-    @Autowired
-    public CustomUserDetailsService(UserRepository userRepo) {
+    public CustomUserDetailsService(UserRepository userRepo, BookRepository bookRepository) {
         this.userRepo = userRepo;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -39,12 +34,12 @@ public class CustomUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
         if (user != null) {
-            return new CustomUserDetails(user); //if the users exists it will return the user with the appropriate fields
+            return new CustomUserDetails(user); // if the users exists it will return the user with the appropriate
+                                                // fields
         }
         throw new UsernameNotFoundException(
                 "User '" + username + "' not found");
     }
-
 
     public List<Book> getUserBooks(User user) {
         return bookRepository.findByUsers(user);

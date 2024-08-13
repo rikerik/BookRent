@@ -1,71 +1,94 @@
 <html class="scroll-smooth" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../static/css/tailwind.css" th:href="@{../static/css/tailwind.css}" type="text/css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link
+      href="../static/css/tailwind.css"
+      th:href="@{../static/css/tailwind.css}"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title> User remove page </title>
-</head>
+    <title>User remove page</title>
+  </head>
 
-<body>
-<div class="navbar  ">
-    <div class="navbar-start">
+  <body>
+    <div class="navbar">
+      <div class="navbar-start">
         <a class="navbar-item">BookWave</a>
-        <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
-    </div>
-    <div class="navbar-center">
+        <p class="badge badge-outline-warning badge-lg">
+          Welcome&nbsp;<span sec:authentication="name"></span>!
+        </p>
+      </div>
+      <div class="navbar-center">
         <a class="navbar-item" th:href="@{/}">Home</a>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
-            <a class="navbar-item navbar-active" th:href="@{/BookAddingPage}">Book adding page (for admins)</a>
-            <a class="navbar-item" th:href="@{/listBooks}">All books</a>
+          <a class="navbar-item navbar-active" th:href="@{/BookAddingPage}"
+            >Book adding page (for admins)</a
+          >
+          <a class="navbar-item" th:href="@{/listBooks}">All books</a>
         </div>
-    </div>
-    <div class="navbar-end">
+      </div>
+      <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
-            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle navbar-item">Sign out</a>
-            <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-                <input hidden type="submit" value="Sign Out"/>
-            </form>
+          <a
+            href="javascript: document.logoutForm.submit()"
+            class="dropdown-toggle navbar-item"
+            >Sign out</a
+          >
+          <form
+            name="logoutForm"
+            th:action="@{/logout}"
+            method="post"
+            th:hidden="true"
+          >
+            <input hidden type="submit" value="Sign Out" />
+          </form>
         </div>
+      </div>
     </div>
-</div>
 
-<div class="flex h-screen">
-    <div class="m-auto">
+    <div class="flex h-screen">
+      <div class="m-auto">
         <table class="table-auto">
-            <thead>
+          <thead>
             <tr>
-                <th class="px-4 py-2">User ID</th>
-                <th class="px-4 py-2">Name</th>
-                <th class="px-4 py-2">Email</th>
-                <th class="px-4 py-2">Remove</th> <!-- New column for remove button -->
+              <th class="px-4 py-2">User ID</th>
+              <th class="px-4 py-2">Name</th>
+              <th class="px-4 py-2">Email</th>
+              <th class="px-4 py-2">Remove</th>
+              <!-- New column for remove button -->
             </tr>
-            </thead>
-            <tbody>
+          </thead>
+          <tbody>
             <!-- Loop through your users and populate the table -->
             <tr th:each="user : ${users}">
-                <td class="border px-4 py-2" th:text="${user.userId}"></td>
-                <td class="border px-4 py-2" th:text="${user.username}"></td>
-                <td class="border px-4 py-2" th:text="${user.email}"></td>
-                <td class="border px-4 py-2">
-                    <!-- Form to submit removal request -->
-                    <form th:action="@{/userRemover}" method="post">
-                        <input type="hidden" name="id" th:value="${user.userId}" />
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                            Remove
-                        </button>
-                    </form>
-                </td>
+              <td class="border px-4 py-2" th:text="${user.userId}"></td>
+              <td class="border px-4 py-2" th:text="${user.username}"></td>
+              <td class="border px-4 py-2" th:text="${user.email}"></td>
+              <td class="border px-4 py-2">
+                <!-- Form to submit removal request -->
+                <form th:action="@{/userRemover}" method="post">
+                  <input type="hidden" name="id" th:value="${user.userId}" />
+                  <button
+                    type="submit"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Remove
+                  </button>
+                </form>
+              </td>
             </tr>
-            </tbody>
+          </tbody>
         </table>
-        <div th:if="${message}" style="color: red;">
-            <p th:text="${message}"></p>
+        <div th:if="${message}" style="color: red">
+          <p th:text="${message}"></p>
         </div>
+      </div>
     </div>
-</div>
 
-<script type="text/javascript" th:src="@{/js/script.js}"></script>
-
-</body>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+  </body>
 </html>

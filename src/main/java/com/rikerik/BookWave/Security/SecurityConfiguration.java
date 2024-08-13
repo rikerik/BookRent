@@ -3,6 +3,8 @@ package com.rikerik.BookWave.Security;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,12 +25,16 @@ import java.io.IOException;
  * This class represents the configuration for security in the application.
  * It provides methods to configure authentication and authorization settings.
  */
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Autowired
     private UserDetailsService userDetailsService;
+
+    public SecurityConfiguration(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     // Configures and returns an AuthenticationProvider
@@ -56,7 +62,7 @@ public class SecurityConfiguration {
                 AuthenticationException exception) throws IOException, ServletException {
             String username = request.getParameter("username");
             String error = exception.getMessage();
-            System.out.println("A failed login attempt with username: "
+            log.info("A failed login attempt with username: "
                     + username + ". Reason: " + error);
         }
     }

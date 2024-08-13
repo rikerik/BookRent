@@ -1,15 +1,17 @@
 package com.rikerik.BookWave.Service;
 
 import com.rikerik.BookWave.Model.Book;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+@Slf4j
+@Service
 public class RecommendationService {
-    private static final Logger logger = LoggerFactory.getLogger(RecommendationService.class);
 
     public static List<Book> findRecommendedBooks(List<String> topLabels, List<Book> allBooks, List<Book> userBooks) {
 
@@ -29,7 +31,7 @@ public class RecommendationService {
                 .collect(Collectors.toList());
 
         if (recommendedBooks.isEmpty()) {
-            logger.info("No recommended books found for the provided labels.");
+            log.info("No recommended books found for the provided labels.");
 
             recommendedBooks.add(new Book(" "));
         }
@@ -37,13 +39,12 @@ public class RecommendationService {
         return recommendedBooks;
     }
 
-
     public static List<String> calculateTopLabels(List<Book> userBooks) {
         Map<String, Long> labelFrequencies = userBooks.stream()
                 .flatMap(book -> Arrays.stream(book.getLabels().split(",")))
                 .collect(Collectors.groupingBy(String::toLowerCase, Collectors.counting()));
 
-        logger.info("Label Frequencies: " + labelFrequencies);
+        log.info("Label Frequencies: " + labelFrequencies);
 
         // Sort the labels by frequency in descending order
         List<Map.Entry<String, Long>> sortedLabels = labelFrequencies.entrySet().stream()
@@ -51,12 +52,10 @@ public class RecommendationService {
                 .collect(Collectors.toList());
 
         // Select the top 3 labels
-        List<String> topLabels = sortedLabels.stream()
+        return sortedLabels.stream()
                 .limit(3)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
-
-        return topLabels;
 
     }
 

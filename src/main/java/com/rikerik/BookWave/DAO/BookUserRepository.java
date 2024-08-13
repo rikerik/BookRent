@@ -1,6 +1,8 @@
 package com.rikerik.BookWave.DAO;
 
 import com.rikerik.BookWave.Model.BookUser;
+import com.rikerik.BookWave.Model.BookUserId;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,9 +12,10 @@ import java.util.List;
 
 /**
  * This interface represents a repository for managing BookUser entities.
- * It extends the JpaRepository interface, providing CRUD operations for BookUser entities.
+ * It extends the JpaRepository interface, providing CRUD operations for
+ * BookUser entities.
  */
-public interface BookUserRepository extends JpaRepository<BookUser, Long> {
+public interface BookUserRepository extends JpaRepository<BookUser, BookUserId> {
 
     /**
      * Retrieves a list of overdue books based on the given current date and time.

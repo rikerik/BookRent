@@ -1,73 +1,106 @@
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head>
-  <style>
-    .image-height {
-      height: 32rem;
-    }
-  </style>
+  <head>
+    <style>
+      .image-height {
+        height: 32rem;
+      }
+    </style>
 
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
-  <link href="../static/css/tailwind.css" th:href="@{../static/css/tailwind.css}" type="text/css">
-  <title>The Library</title>
-</head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"
+    />
+    <link
+      href="../static/css/tailwind.css"
+      th:href="@{../static/css/tailwind.css}"
+      type="text/css"
+    />
+    <title>The Library</title>
+  </head>
 
-<div class="navbar  ">
-  <div class="navbar-start">
-    <a class="navbar-item">BookWave</a>
-    <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
-  </div>
-  <div class="navbar-center">
-    <a class="navbar-item" th:href="@{/}">Home</a>
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-      <a class="navbar-item" th:href="@{/BookAddingPage}">Book adding page (for admins)</a>
-      <a class="navbar-item navbar-active" th:href="@{/listBooks}">All books</a>
+  <div class="navbar">
+    <div class="navbar-start">
+      <a class="navbar-item">BookWave</a>
+      <p class="badge badge-outline-warning badge-lg">
+        Welcome&nbsp;<span sec:authentication="name"></span>!
+      </p>
     </div>
-
-  </div>
-  <div class="navbar-end">
-    <div sec:authorize="isAuthenticated()">
-      <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle navbar-item">Sign out</a>
-      <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-        <input hidden type="submit" value="Sign Out"/>
-      </form>
+    <div class="navbar-center">
+      <a class="navbar-item" th:href="@{/}">Home</a>
+      <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a class="navbar-item" th:href="@{/BookAddingPage}"
+          >Book adding page (for admins)</a
+        >
+        <a class="navbar-item navbar-active" th:href="@{/listBooks}"
+          >All books</a
+        >
+      </div>
     </div>
-  </div>
-</div>
-
-<body>
-
-<div class="flex flex-row flex-wrap">
-  <div class="p-6 w-auto" th:each="book : ${books}">
-    <div class="card ml-10 mt-5 p-6 h-full relative group">
-      <div class="flip-card">
-        <!-- Front of the card -->
-        <div class="transition-transform duration-500 ease-in-out">
-          <img class="w-96 image-height object-cover mx-auto"
-               th:src="'data:image/jpeg;charset=utf-8;base64,' + ${book.imageBase64}" alt="">
-          <div class="card-body text-center">
-            <h5 class="card-title text-2xl font-semibold mb-2" th:text="${book.title}">Title</h5>
-            <p class="card-text text-base text-gray-600" th:text="${book.authorName}">Author</p>
-          </div>
-        </div>
-
-        <!-- Back of the card -->
-        <div class="card absolute top-0 left-0 w-full h-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out card-body text-center flex flex-col">
-          <!-- Only show the description on the back side -->
-          <p class="card-text mb-4 text-lg" th:text="${book.description}"></p>
-        </div>
-
-
+    <div class="navbar-end">
+      <div sec:authorize="isAuthenticated()">
+        <a
+          href="javascript: document.logoutForm.submit()"
+          class="dropdown-toggle navbar-item"
+          >Sign out</a
+        >
+        <form
+          name="logoutForm"
+          th:action="@{/logout}"
+          method="post"
+          th:hidden="true"
+        >
+          <input hidden type="submit" value="Sign Out" />
+        </form>
       </div>
     </div>
   </div>
-</div>
-</body>
 
+  <body>
+    <div class="flex flex-row flex-wrap">
+      <div class="p-6 w-auto" th:each="book : ${books}">
+        <div class="card ml-10 mt-5 p-6 h-full relative group">
+          <div class="flip-card">
+            <!-- Front of the card -->
+            <div class="transition-transform duration-500 ease-in-out">
+              <img
+                class="w-96 image-height object-cover mx-auto"
+                th:src="'data:image/jpeg;charset=utf-8;base64,' + ${book.imageBase64}"
+                alt=""
+              />
+              <div class="card-body text-center">
+                <h5
+                  class="card-title text-2xl font-semibold mb-2"
+                  th:text="${book.title}"
+                >
+                  Title
+                </h5>
+                <p
+                  class="card-text text-base text-gray-600"
+                  th:text="${book.authorName}"
+                >
+                  Author
+                </p>
+              </div>
+            </div>
+
+            <!-- Back of the card -->
+            <div
+              class="card absolute top-0 left-0 w-full h-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out card-body text-center flex flex-col"
+            >
+              <!-- Only show the description on the back side -->
+              <p
+                class="card-text mb-4 text-lg"
+                th:text="${book.description}"
+              ></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
 
-
 <script type="text/javascript" th:src="@{/js/script.js}"></script>
-

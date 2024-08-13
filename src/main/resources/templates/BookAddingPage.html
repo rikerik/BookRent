@@ -1,143 +1,204 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html class="scroll-smooth" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="../static/css/tailwind.css" th:href="@{../static/css/tailwind.css}" type="text/css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"/>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link
+      href="../static/css/tailwind.css"
+      th:href="@{../static/css/tailwind.css}"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title> Book Adding Page </title>
-</head>
+    <title>Book Adding Page</title>
+  </head>
 
-<body>
-<div class="navbar  ">
-    <div class="navbar-start">
+  <body>
+    <div class="navbar">
+      <div class="navbar-start">
         <a class="navbar-item">BookWave</a>
-        <p class="badge badge-outline-success badge-lg">Welcome&nbsp;<span sec:authentication="name"></span>!</p>
-    </div>
-    <div class="navbar-center">
+        <p class="badge badge-outline-warning badge-lg">
+          Welcome&nbsp;<span sec:authentication="name"></span>!
+        </p>
+      </div>
+      <div class="navbar-center">
         <a class="navbar-item" th:href="@{/}">Home</a>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
-            <a class="navbar-item navbar-active" th:href="@{/BookAddingPage}">Book adding page (for admins)</a>
-            <a class="navbar-item" th:href="@{/listBooks}">All books</a>
+          <a class="navbar-item navbar-active" th:href="@{/BookAddingPage}"
+            >Book adding page (for admins)</a
+          >
+          <a class="navbar-item" th:href="@{/listBooks}">All books</a>
         </div>
-    </div>
-    <div class="navbar-end">
+      </div>
+      <div class="navbar-end">
         <div sec:authorize="isAuthenticated()">
-            <a href="javascript: document.logoutForm.submit()" class="dropdown-toggle navbar-item">Sign out</a>
-            <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-                <input hidden type="submit" value="Sign Out"/>
-            </form>
+          <a
+            href="javascript: document.logoutForm.submit()"
+            class="dropdown-toggle navbar-item"
+            >Sign out</a
+          >
+          <form
+            name="logoutForm"
+            th:action="@{/logout}"
+            method="post"
+            th:hidden="true"
+          >
+            <input hidden type="submit" value="Sign Out" />
+          </form>
         </div>
+      </div>
     </div>
-</div>
-
-<div class="flex h-screen">
-    <div class="m-auto">
-        <form id="bookAddForm" th:action="@{/registerBook}" method="POST" autocomplete="off" enctype="multipart/form-data">
-            <div class="container">
-                <div class="flex flex-col justify-center items-center">
-                    <label>Author:</label>
-                    <label>
-                        <input class="input-ghost-primary input" type="text" placeholder="Enter Author's name"
-                               name="authorName"
-                               required>
-                    </label>
-                </div>
-                <div class="flex flex-col justify-center items-center">
-                    <label>Title:</label>
-                    <label>
-                        <input class="input-ghost-primary input" type="text" placeholder="Enter book's title"
-                               name="title"
-                               required>
-                    </label>
-                </div>
-                <div class="flex flex-col justify-center items-center">
-                    <label>Genre:</label>
-                    <label>
-                        <input class="input-ghost-primary input" type="text" placeholder="Enter book's genre"
-                               name="genre"
-                               required>
-                    </label>
-                </div>
-
-                <div class="flex flex-col justify-center items-center">
-                    <label>Amount:</label>
-                    <label>
-                        <input class="input-ghost-primary input" type="text" placeholder="Enter book's amount"
-                               name="amount"
-                               required>
-                    </label>
-                </div>
-                <div class="flex flex-col justify-center items-center">
-                    <label>Labels:</label>
-                    <label>
-                        <input class="input-ghost-primary input" type="text" placeholder="Enter book's labels"
-                               name="labels"
-                               required>
-                    </label>
-                </div>
-                <div class="flex flex-col justify-center items-center">
-                    <label>Description:</label>
-                    <label>
-                        <input class="input-file input-file-sm" type="file"
-                               name="description"
-                               accept=".txt"
-                               required>
-                    </label>
-                </div>
-                <div class="flex flex-col justify-center items-center">
-                    <label>Image:</label>
-                    <label>
-                        <input class="input-file input-file-sm" type="file"
-                               name="image"
-                               accept=".jpg, .jpeg, .png"
-                               required>
-                    </label>
-                </div>
-                <div class="btn btn-primary btn-block flex flex-col justify-center items-center my-4 mx-0">
-                    <button onclick="registerBook()" type="submit">Add book</button>
-                </div>
+    <div class="flex h-screen">
+      <div class="m-auto">
+        <form
+          id="bookAddForm"
+          th:action="@{/registerBook}"
+          method="POST"
+          autocomplete="off"
+          enctype="multipart/form-data"
+        >
+          <div class="container">
+            <div class="flex flex-col justify-center items-center">
+              <label>Author:</label>
+              <label>
+                <input
+                  class="input-ghost-primary input"
+                  type="text"
+                  placeholder="Enter Author's name"
+                  name="authorName"
+                  required
+                />
+              </label>
             </div>
+            <div class="flex flex-col justify-center items-center">
+              <label>Title:</label>
+              <label>
+                <input
+                  class="input-ghost-primary input"
+                  type="text"
+                  placeholder="Enter book's title"
+                  name="title"
+                  required
+                />
+              </label>
+            </div>
+            <div class="flex flex-col justify-center items-center">
+              <label>Genre:</label>
+              <label>
+                <input
+                  class="input-ghost-primary input"
+                  type="text"
+                  placeholder="Enter book's genre"
+                  name="genre"
+                  required
+                />
+              </label>
+            </div>
+
+            <div class="flex flex-col justify-center items-center">
+              <label>Amount:</label>
+              <label>
+                <input
+                  class="input-ghost-primary input"
+                  type="text"
+                  placeholder="Enter book's amount"
+                  name="amount"
+                  required
+                />
+              </label>
+            </div>
+            <div class="flex flex-col justify-center items-center">
+              <label>Labels:</label>
+              <label>
+                <input
+                  class="input-ghost-primary input"
+                  type="text"
+                  placeholder="Enter book's labels"
+                  name="labels"
+                  required
+                />
+              </label>
+            </div>
+            <div class="flex flex-col justify-center items-center">
+              <label>Description:</label>
+              <label>
+                <input
+                  class="input-file input-file-sm"
+                  type="file"
+                  name="description"
+                  accept=".txt"
+                  required
+                />
+              </label>
+            </div>
+            <div class="flex flex-col justify-center items-center">
+              <label>Image:</label>
+              <label>
+                <input
+                  class="input-file input-file-sm"
+                  type="file"
+                  name="image"
+                  accept=".jpg, .jpeg, .png"
+                  required
+                />
+              </label>
+            </div>
+            <div
+              class="btn btn-primary btn-block flex flex-col justify-center items-center my-4 mx-0"
+            >
+              <button onclick="registerBook()" type="submit">Add book</button>
+            </div>
+          </div>
         </form>
+      </div>
     </div>
-</div>
-<div class="flex h-screen">
-    <div class="m-auto">
+    <div class="flex h-screen">
+      <div class="m-auto">
         <table class="table-auto">
-            <thead>
+          <thead>
             <tr>
-                <th class="px-4 py-2">Book ID</th>
-                <th class="px-4 py-2">Title</th>
-                <th class="px-4 py-2">Author</th>
-                <th class="px-4 py-2">Remove</th> <!-- New column for remove button -->
+              <th class="px-4 py-2">Book ID</th>
+              <th class="px-4 py-2">Title</th>
+              <th class="px-4 py-2">Author</th>
+              <th class="px-4 py-2">Remove</th>
+              <!-- New column for remove button -->
             </tr>
-            </thead>
-            <tbody>
+          </thead>
+          <tbody>
             <!-- Loop through your users and populate the table -->
             <tr th:each="book : ${books}">
-                <td class="border px-4 py-2" th:text="${book.bookId}"></td>
-                <td class="border px-4 py-2" th:text="${book.title}"></td>
-                <td class="border px-4 py-2" th:text="${book.authorName}"></td>
-                <td class="border px-4 py-2">
-                    <!-- Form to submit removal request -->
-                    <form th:action="@{/bookRemover}" method="post">
-                        <input type="hidden" name="id" th:value="${book.bookId}" />
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                            Remove
-                        </button>
-                    </form>
-                </td>
+              <td class="border px-4 py-2" th:text="${book.bookId}"></td>
+              <td class="border px-4 py-2" th:text="${book.title}"></td>
+              <td class="border px-4 py-2" th:text="${book.authorName}"></td>
+              <td class="border px-4 py-2">
+                <!-- Form to submit removal request -->
+                <form th:action="@{/bookRemover}" method="post">
+                  <input type="hidden" name="id" th:value="${book.bookId}" />
+                  <button
+                    type="submit"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Remove
+                  </button>
+                </form>
+              </td>
             </tr>
-            </tbody>
+          </tbody>
         </table>
-        <div th:if="${message}" style="color: red;">
-            <p th:text="${message}"></p>
+        <div th:if="${message}" style="color: red">
+          <p th:text="${message}"></p>
         </div>
+      </div>
     </div>
-</div>
 
-
-<script type="text/javascript" th:src="@{/js/script.js}"></script>
-
-</body>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+    <script>
+      // JavaScript to hide the spinner once the page is fully loaded
+      window.addEventListener("load", function () {
+        document.getElementById("loading").style.display = "none";
+      });
+    </script>
+  </body>
 </html>

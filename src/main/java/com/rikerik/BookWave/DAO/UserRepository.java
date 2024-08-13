@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 //Data access object for users
 /**
  * This interface represents a repository for managing User entities.
- * It extends the JpaRepository interface, providing CRUD operations for User entities.
+ * It extends the JpaRepository interface, providing CRUD operations for User
+ * entities.
  */
 public interface UserRepository extends JpaRepository<User, Long> {
     /**

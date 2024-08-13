@@ -6,9 +6,9 @@ import com.rikerik.BookWave.DAO.UserRepository;
 import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Model.BookUser;
 import com.rikerik.BookWave.Model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,7 @@ import java.util.*;
 import static com.rikerik.BookWave.Service.RecommendationService.calculateTopLabels;
 import static com.rikerik.BookWave.Service.RecommendationService.findRecommendedBooks;
 
+@Slf4j
 @Service
 public class LibraryService {
     private final BookRepository bookRepository;
@@ -26,9 +27,6 @@ public class LibraryService {
     private final BookUserRepository bookUserRepository;
     private final CustomUserDetailsService userService;
 
-    private static final Logger logger = LoggerFactory.getLogger(LibraryService.class);
-
-    @Autowired
     public LibraryService(BookRepository bookRepository, UserRepository userRepository,
             BookUserRepository bookUserRepository, CustomUserDetailsService userService) {
         this.bookRepository = bookRepository;
@@ -40,13 +38,13 @@ public class LibraryService {
     public List<Book> getLibrary() { // add the books to the model so the View will be able to use it
         List<Book> books = bookRepository.findAll();
         if (books.isEmpty()) {
-            logger.info("No books are found!");
+            log.info("No books are found!");
         } else {
             for (Book book : books) {
                 String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
                 book.setImageBase64(imageBase64); // iterating through the books and converting the bytes to images
             }
-            logger.info("All books are listed!");
+            log.info("All books are listed!");
 
         }
         return books;
@@ -62,7 +60,7 @@ public class LibraryService {
         List<Book> userBooks = bookRepository.findByUsers(user);
 
         if (userBooks.isEmpty()) {
-            logger.info("No books are found for the user!");
+            log.info("No books are found for the user!");
         } else {
             for (Book book : userBooks) {
                 String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
@@ -72,12 +70,12 @@ public class LibraryService {
                 List<String> labels = Arrays.asList(book.getLabels().split(","));
                 System.out.println("Labels for Book " + book.getBookId() + ": " + labels);
             }
-            logger.info("User's books are listed!");
+            log.info("User's books are listed!");
 
             // Calculate label frequencies for all books
             List<String> topLabels = calculateTopLabels(userBooks);
 
-            logger.info("Top Labels: " + topLabels);
+            log.info("Top Labels: " + topLabels);
             // Find books that match the top labels
             List<Book> recommendedBooks = findRecommendedBooks(topLabels, allBooks, userBooks);
 
@@ -89,7 +87,7 @@ public class LibraryService {
             modelAttributes.put("topLabels", topLabels);
 
             for (Book book : recommendedBooks) {
-                logger.info("Recommended book title: {}", book.getTitle());
+                log.info("Recommended book title: {}", book.getTitle());
             }
         }
 
@@ -101,13 +99,13 @@ public class LibraryService {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
 
-        logger.info("User '{}' is attempting to rent book with ID '{}'", username, bookId);
+        log.info("User '{}' is attempting to rent book with ID '{}'", username, bookId);
 
         Optional<Book> optionalBook = bookRepository.findById(bookId);
 
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            logger.info("Book '{}' found with amount '{}'", book.getTitle(), book.getBookAmount());
+            log.info("Book '{}' found with amount '{}'", book.getTitle(), book.getBookAmount());
 
             if (book.getBookAmount() > 0) {
                 try {
@@ -115,7 +113,7 @@ public class LibraryService {
                     boolean alreadyRented = book.getUsers().contains(user);
 
                     if (!alreadyRented) {
-                        logger.info("User '{}' does not have the book '{}'. Proceeding with rental.", username,
+                        log.info("User '{}' does not have the book '{}'. Proceeding with rental.", username,
                                 book.getTitle());
 
                         // Decrease the book amount
@@ -135,19 +133,19 @@ public class LibraryService {
                         // Save the changes
                         bookRepository.save(book);
 
-                        logger.info("Book '{}' successfully rented to user '{}'. Remaining amount: '{}'",
+                        log.info("Book '{}' successfully rented to user '{}'. Remaining amount: '{}'",
                                 book.getTitle(), username, book.getBookAmount());
                     } else {
-                        logger.info("User '{}' already has the book '{}' in their library.", username, book.getTitle());
+                        log.info("User '{}' already has the book '{}' in their library.", username, book.getTitle());
                     }
                 } catch (Exception e) {
-                    logger.error("Error occurred while renting book '{}': {}", book.getTitle(), e.getMessage(), e);
+                    log.error("Error occurred while renting book '{}': {}", book.getTitle(), e.getMessage(), e);
                 }
             } else {
-                logger.info("Book '{}' is out of stock. Unable to rent.", book.getTitle());
+                log.info("Book '{}' is out of stock. Unable to rent.", book.getTitle());
             }
         } else {
-            logger.warn("Book with ID '{}' not found. User '{}' attempted to rent it.", bookId, username);
+            log.warn("Book with ID '{}' not found. User '{}' attempted to rent it.", bookId, username);
         }
     }
 
@@ -166,7 +164,7 @@ public class LibraryService {
             book.setBookAmount(book.getBookAmount() + 1);
 
             bookRepository.save(book);
-            logger.info(book.getTitle() + " is returned by " + currentUser.getUsername());
+            log.info(book.getTitle() + " is returned by " + currentUser.getUsername());
         }
     }
 

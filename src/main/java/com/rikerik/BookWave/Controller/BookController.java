@@ -3,10 +3,9 @@ package com.rikerik.BookWave.Controller;
 import com.rikerik.BookWave.Model.Book;
 
 import com.rikerik.BookWave.Service.BookService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,10 +18,10 @@ import java.util.*;
 /**
  * This class is the controller for handling book-related operations.
  */
-@SpringBootApplication
+
+@Slf4j
 @Controller
 public class BookController {
-    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     private final BookService bookService;
 
@@ -115,7 +114,7 @@ public class BookController {
     public String register(Model model) {
         List<Book> books = bookService.getAllBooks();
         model.addAttribute("books", books);
-        logger.debug("Number of books: {}", books.size());
+        log.info("Number of books: {}", books.size());
         return "BookAddingPage";
     }
 
@@ -147,11 +146,5 @@ public class BookController {
         // Redirect to getUsers to refresh the user list after removal
         return "redirect:/BookAddingPage";
     }
-
-    /**
-     * Retrieves the name of the view template for removing a book.
-     *
-     * @return the name of the view template for removing a book
-     */
 
 }

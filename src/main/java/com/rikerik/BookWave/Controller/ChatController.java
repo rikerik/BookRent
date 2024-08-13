@@ -5,7 +5,6 @@ import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Model.ChatMessage;
 import com.rikerik.BookWave.Model.User;
 import com.rikerik.BookWave.Service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,8 +21,6 @@ import java.util.List;
 public class ChatController {
 
     private final UserRepository userRepository;
-
-    @Autowired
     private CustomUserDetailsService userService;
 
     /**
@@ -31,15 +28,16 @@ public class ChatController {
      *
      * @param userRepository the UserRepository to be used
      */
-    public ChatController(UserRepository userRepository) {
+    public ChatController(UserRepository userRepository, CustomUserDetailsService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     /**
      * Registers a user for the "scifi" chat topic.
      *
-     * @param chatMessage     the ChatMessage payload
-     * @param headerAccessor  the SimpMessageHeaderAccessor
+     * @param chatMessage    the ChatMessage payload
+     * @param headerAccessor the SimpMessageHeaderAccessor
      * @return the registered ChatMessage
      */
     @MessageMapping("/scifi/register")
@@ -52,7 +50,7 @@ public class ChatController {
     /**
      * Sends a message to the "scifi" chat topic.
      *
-     * @param chatMessage  the ChatMessage payload
+     * @param chatMessage the ChatMessage payload
      * @return the sent ChatMessage
      */
     @MessageMapping("/scifi/send")
@@ -64,7 +62,7 @@ public class ChatController {
     /**
      * Leaves the "scifi" chat topic.
      *
-     * @param chatMessage  the ChatMessage payload
+     * @param chatMessage the ChatMessage payload
      * @return the ChatMessage indicating leaving the chat
      */
     @MessageMapping("/scifi/leave")
@@ -76,8 +74,8 @@ public class ChatController {
     /**
      * Registers a user for the "fantasy" chat topic.
      *
-     * @param chatMessage     the ChatMessage payload
-     * @param headerAccessor  the SimpMessageHeaderAccessor
+     * @param chatMessage    the ChatMessage payload
+     * @param headerAccessor the SimpMessageHeaderAccessor
      * @return the registered ChatMessage
      */
     @MessageMapping("/fantasy/register")
@@ -90,7 +88,7 @@ public class ChatController {
     /**
      * Sends a message to the "fantasy" chat topic.
      *
-     * @param chatMessage  the ChatMessage payload
+     * @param chatMessage the ChatMessage payload
      * @return the sent ChatMessage
      */
     @MessageMapping("/fantasy/send")
@@ -102,7 +100,7 @@ public class ChatController {
     /**
      * Leaves the "fantasy" chat topic.
      *
-     * @param chatMessage  the ChatMessage payload
+     * @param chatMessage the ChatMessage payload
      * @return the ChatMessage indicating leaving the chat
      */
     @MessageMapping("/fantasy/leave")
@@ -114,8 +112,9 @@ public class ChatController {
     /**
      * Handles the GET request for the "/chatScifi" endpoint.
      *
-     * @param model  the Model object
-     * @return the view name for the "scifi" chat page or a redirect to the library page
+     * @param model the Model object
+     * @return the view name for the "scifi" chat page or a redirect to the library
+     *         page
      */
     @GetMapping("/chatScifi")
     public String scifiIndex(Model model) {
@@ -126,7 +125,7 @@ public class ChatController {
 
         if (!userService.hasEnoughScifiBooks(userBooks)) {
             // Redirect or handle the case where the user doesn't have enough scifi books
-            return "redirect:/library";
+            return "redirect:/bookSearch";
         }
 
         String username = auth.getName();
@@ -138,8 +137,9 @@ public class ChatController {
     /**
      * Handles the GET request for the "/chatFantasy" endpoint.
      *
-     * @param model  the Model object
-     * @return the view name for the "fantasy" chat page or a redirect to the library page
+     * @param model the Model object
+     * @return the view name for the "fantasy" chat page or a redirect to the
+     *         library page
      */
     @GetMapping("/chatFantasy")
     public String fantasyIndex(Model model) {
@@ -150,7 +150,7 @@ public class ChatController {
 
         if (!userService.hasEnoughFantasyBooks(userBooks)) {
             // Redirect or handle the case where the user doesn't have enough fantasy books
-            return "redirect:/library";
+            return "redirect:/bookSearch";
         }
 
         String username = auth.getName();
@@ -160,5 +160,3 @@ public class ChatController {
         return "chatFantasy";
     }
 }
-
-

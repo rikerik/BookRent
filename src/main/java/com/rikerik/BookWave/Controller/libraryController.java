@@ -5,8 +5,6 @@ import com.rikerik.BookWave.Service.LibraryService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +16,10 @@ import java.util.Map;
 /**
  * The controller class for managing the library operations.
  */
-@SpringBootApplication
 @Controller
 @Slf4j
-public class libraryController {
+public class LibraryController {
 
-    @Autowired
     private final LibraryService libraryService;
 
     /**
@@ -31,8 +27,7 @@ public class libraryController {
      *
      * @param libraryService the LibraryService to be used
      */
-    @Autowired
-    public libraryController(LibraryService libraryService) {
+    public LibraryController(LibraryService libraryService) {
         this.libraryService = libraryService;
     }
 

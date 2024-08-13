@@ -8,13 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.List;
 
 //Data access object for books
 /**
  * This interface represents a repository for managing books.
- * It extends the JpaRepository interface, providing CRUD operations for the Book entity.
+ * It extends the JpaRepository interface, providing CRUD operations for the
+ * Book entity.
  */
 public interface BookRepository extends JpaRepository<Book, Long> {
 
@@ -51,7 +51,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Book findByTitle(String title);
 
     /**
-     * Finds books whose author's name contains the specified search value (case-insensitive).
+     * Finds books whose author's name contains the specified search value
+     * (case-insensitive).
      *
      * @param searchValue the search value to match against author's names
      * @return a list of books whose author's name contains the search value
@@ -60,7 +61,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByAuthorNameILike(@Param("searchValue") String searchValue);
 
     /**
-     * Finds books whose title contains the specified search value (case-insensitive).
+     * Finds books whose title contains the specified search value
+     * (case-insensitive).
      *
      * @param searchValue the search value to match against titles
      * @return a list of books whose title contains the search value
@@ -69,7 +71,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByTitleILike(@Param("searchValue") String searchValue);
 
     /**
-     * Finds books whose genre contains the specified search value (case-insensitive).
+     * Finds books whose genre contains the specified search value
+     * (case-insensitive).
      *
      * @param searchValue the search value to match against genres
      * @return a list of books whose genre contains the search value

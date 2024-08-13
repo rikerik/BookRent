@@ -4,9 +4,9 @@ import com.rikerik.BookWave.DAO.BookRepository;
 import com.rikerik.BookWave.DAO.UserRepository;
 import com.rikerik.BookWave.Model.Book;
 import com.rikerik.BookWave.Model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,20 +16,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+@Slf4j
 @Service
 public class BookService {
-    private static final Logger logger = LoggerFactory.getLogger(BookService.class);
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    @Autowired
     private JdbcOperations jdbcTemplate;
+    private SummaryService summaryService;
 
-    @Autowired
-    public BookService(BookRepository bookRepository, UserRepository userRepository) {
+    public BookService(BookRepository bookRepository, UserRepository userRepository, SummaryService summaryService,
+            JdbcOperations jdbcTemplate) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+        this.summaryService = summaryService;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Transactional
@@ -47,14 +49,18 @@ public class BookService {
         } else {
             User admin = userRepository.findByUsername("Admin"); // to find the admin
             try {
+                log.info("Description file: " + descriptionFile.toString());
                 String descriptionText = new String(descriptionFile.getBytes(), StandardCharsets.UTF_8); // Construct a
                                                                                                          // String from
                                                                                                          // the bytes of
                                                                                                          // the uploaded
                                                                                                          // txt
+                if (descriptionText.length() > 750) {
+                    descriptionText = summaryService.extractText(descriptionText);
+                    log.info("Final description: " + descriptionText);
 
+                }
                 resetSequence(); // Reset the sequence before adding a new book
-
                 bookRepository.save(Book.builder() // save the book
                         .authorName(authorName)
                         .title(title)
@@ -66,7 +72,7 @@ public class BookService {
                         .imageByte(imageFile.getBytes())
                         .build());
             } catch (Exception e) {
-                logger.info(e.getMessage());
+                log.info(e.getMessage());
             }
 
         }
@@ -76,13 +82,13 @@ public class BookService {
         // add the books to the model so the View will be able to use it
         List<Book> books = bookRepository.findAll();
         if (books.isEmpty()) {
-            logger.info("No books are found!");
+            log.info("No books are found!");
         } else {
             for (Book book : books) {
                 String imageBase64 = Base64.getEncoder().encodeToString(book.getImageByte());
                 book.setImageBase64(imageBase64); // iterating through the books and converting the bytes to images
             }
-            logger.info("All books are listed!");
+            log.info("All books are listed!");
         }
         return books;
     }
@@ -113,7 +119,7 @@ public class BookService {
         int numberOfBooks = books.size(); // Count the number of books
 
         // Log the number of books found
-        System.out.println("Number of books found: " + numberOfBooks);
+        log.info("Number of books found: " + numberOfBooks);
 
         if (numberOfBooks == 0) {
             message = "No books found for the specified " + attribute + ": " + searchValue;
@@ -139,9 +145,9 @@ public class BookService {
             Book book = optionalBook.get();
             // Remove the book
             bookRepository.delete(book);
-            logger.info("Book removed successfully: " + book.getTitle());
+            log.info("Book removed successfully: " + book.getTitle());
         } else {
-            logger.info("Book with ID '" + bookId + "' not found.");
+            log.info("Book with ID '" + bookId + "' not found.");
         }
     }
 
