@@ -33,6 +33,5 @@ build/
 .vscode/
 
 
-
-python/.myenv
-node_modules
+myenv/
+node_modules/
